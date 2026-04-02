@@ -1,0 +1,286 @@
+<tal:page metal:use-macro="container/ptMaster/macros/page">
+<tal:body metal:fill-slot="body">
+
+  <tal:get-course tal:define="courseid                request/form/courseid | nothing;
+                              type                    request/form/type | nothing;
+                              api                     python:container.api;
+                              c                       python:api.course.get(courseid=courseid);
+                              areas                   api/areas_of_specialization_dict;
+                              areas_keys              python:areas.keys();
+                              prof_attributes_list    api/professional_attributes_list;
+                              paa_keys                python:[i[0] for i in prof_attributes_list];
+                              prof_attributes_dict    api/professional_attributes_dict;
+                              outcomes                python:api.learningobjectives.get(courseid=courseid);
+                            ">               
+                                                       
+                        
+    <tal:no-course tal:condition="not:courseid">
+      <h1>Invalid Course!</h1>
+      
+      <p>
+        The link you used to get to this page is invalid. Please use the 
+        left sidebar to browse the lists of people.
+      </p>
+    </tal:no-course>
+    
+    <tal:course tal:condition="courseid">
+    
+      <h1 tal:content="string:${c/schoolprefix} ${c/coursenumber} - ${c/ececoursetitle}"></h1>
+    
+      <div tal:condition="python:c['supplementaryinfo']">
+        <h2>Note:</h2>
+        <p tal:content="structure c/supplementaryinfo"></p>
+      </div>
+      
+      <h2>Course Details</h2>
+    
+      <p tal:condition="python:c['variablecredit']">
+        Variable Credit
+      </p>
+    
+      <p tal:condition="python:not c['variablecredit']">
+        <span tal:condition="python:c['lecturehours'] > 0"
+              tal:content="string:Lecture Hours: ${c/lecturehours}"></span>
+        <span tal:condition="python:c['labhours'] > 0"
+              tal:content="string:Lab Hours: ${c/labhours}"></span>
+        <span tal:content="string:Credits: ${c/totalcredits}"></span>
+      </p>
+    
+      <tal:undergrad tal:condition="python:type=='undergrad'">
+        <p tal:condition="python:c['nonece_type'] and 1==2">
+           tal:content="structure string:Use towards <em>${c/nonece_type}</em> credit"></p>
+    
+        <!-- tal:condition="python:c['special_content']">
+          This is a <a href="special">Special Content</a> course.  No more than 6 credits of 
+          <a href="special">Special Content</a> type courses may apply towards the ECE Requirements 
+          of the BSEE.  Excess hours can be used for Unrestricted Electives.
+        -->
+    
+        <p tal:condition="python:c['cmpe_elective']">
+          This is an experiential learning course.
+        </p>
+    
+        <p tal:condition="python:c['approved_for_undergrad']">
+          This 50000-level course has been approved for use towards the ECE Requirements of the BSEE -- 
+          also the BSCmpE if approved as a Computer Engineering Elective.
+        </p>
+      </tal:undergrad>
+    
+      <tal:areas tal:condition="python:type=='grad'">
+        <h3>Areas of Specialization:</h3>
+        <ul>
+          <tal:areas tal:repeat="area_key areas_keys">
+            <li tal:condition="python: c[area_key]"
+                tal:content="structure python: areas[area_key]">Area of Specialization</li>
+          </tal:areas>
+        </ul>
+      </tal:areas>
+    
+      <div tal:condition="python: paa_keys and len([k for k in paa_keys if k.strip()])">
+        <h3>Counts as:</h3>
+        <ul>
+          <tal:item tal:repeat="paa paa_keys">
+            <li tal:condition="python:c[paa]"
+                      tal:content="python:prof_attributes_dict[paa]"
+                      tal:on-error="nothing">Counts as
+            </li>
+          </tal:item>
+        </ul>
+      </div>
+    
+      <!--
+      <div tal:condition="python:type=='undergrad'">
+        <p tal:condition="python:c['nonece_type'] and 1==2">
+           tal:content="structure string:Use towards <em>${c/nonece_type}</em> credit"></p>
+    
+        <p tal:condition="python:c['special_content']">
+            This is a <a href="special">Special Content</a> course.  No more than 6 credits of 
+            <a href="special">Special Content</a> type courses may apply towards the ECE Requirements 
+            of the BSEE.  Excess hours can be used for Unrestricted Electives.
+        </p>
+    
+        <p tal:condition="python:c['cmpe_elective']">
+            This course may be used as a Computer Engineering Elective for the BSCmpE.
+        </p>
+    
+        <p tal:condition="python:c['approved_for_undergrad']">
+            This 500 level course has been approved for use towards the ECE Requirements of the BSEE -- 
+            also the BSCmpE if approved as a Computer Engineering Elective.
+        </p>
+      </div>
+      -->
+    
+      <div tal:condition="python:c['offered'] == 'Experimental'">
+        <h3>Experimental Course Offered:</h3>
+        <p tal:content="c/exptermoffered"></p>
+      </div>
+    
+      <div tal:condition="python:c['offered'] != 'Experimental'">
+        <h3>Normally Offered:</h3>
+        <p tal:content="c/offered"></p>
+      </div>
+    
+      <div tal:condition="python:c['delivery']">
+        <h3>Campus/Online:</h3>
+        <p tal:content="c/delivery"></p>
+      </div>
+        
+      <div tal:condition="python:c['requisites']">
+        <h3>Requisites:</h3>
+        <p tal:content="structure c/requisites"></p>
+      </div>
+    
+      <div tal:condition="python:c['requisitesbytopic']">
+        <h3>Requisites by Topic:</h3>
+        <p tal:content="structure c/requisitesbytopic"></p>
+      </div>
+    
+      <div>
+        <h3>Catalog Description:</h3>
+        <p tal:content="structure c/coursedescription"></p>
+      </div>
+    
+      <div tal:condition="python:c['courseobjectives']">
+        <h3>Course Objectives:</h3>
+        <p tal:content="c/courseobjectives"></p>
+      </div>
+        
+      <tal:required-texts tal:define="texts python:api.coursetexts.get(courseid=courseid, required='required');">
+        <h3>Required Text(s):</h3> 
+        
+        <p tal:condition="python:not texts or len(texts) == 0">
+          None.
+        </p>
+    
+        <ol tal:condition="python:texts and len(texts) > 0">
+          <li tal:repeat="t texts">
+            <i tal:content="t/title">Title</i>
+            <span tal:condition="t/edition" tal:replace="string:, ${t/edition} Edition"/>
+            <span tal:condition="t/authors" tal:replace="string:, ${t/authors}"/>
+            <span tal:condition="t/publisher" tal:replace="string:, ${t/publisher}"/>
+            <span tal:condition="t/datepublished" tal:replace="string:, ${t/datepublished}"/>
+            <span tal:condition="t/isbn" tal:replace="string:, ISBN No. ${t/isbn}"/>
+          </li>
+        </ol>
+      </tal:required-texts>
+    
+      <tal:recommended-texts tal:define="texts python:api.coursetexts.get(courseid=courseid, required='recommended');">
+        <h3>Recommended Text(s):</h3>
+            
+        <p tal:condition="python:not texts or len(texts) == 0">
+          None.
+        </p>
+    
+        <ol tal:condition="python:texts and len(texts) > 0">
+          <li tal:repeat="t texts">
+            <i tal:content="t/title">Title</i>
+            <span tal:condition="t/edition" tal:replace="string:, ${t/edition} Edition"/>
+            <span tal:condition="t/authors" tal:replace="string:, ${t/authors}"/>
+            <span tal:condition="t/publisher" tal:replace="string:, ${t/publisher}"/>
+            <span tal:condition="t/datepublished" tal:replace="string:, ${t/datepublished}"/>
+            <span tal:condition="t/isbn" tal:replace="string:, ISBN No. ${t/isbn}"/>
+          </li>
+        </ol>
+      </tal:recommended-texts>
+      
+      <div tal:condition="python: outcomes and type=='grad'">
+        <h3>Learning Outcomes</h3>
+        <p tal:content="structure c/outcomeheading | nothing"></p>
+        <ul>
+          <li tal:repeat="o outcomes">
+            <tal:outcome tal:content="structure o/outcome" />
+          </li>
+        </ul>
+      </div>
+      
+      <tal:undergrad tal:condition="python: type=='undergrad'">
+        <tal:learning-objectives tal:define="learningobjectives python:api.learningobjectives.get(courseid=courseid);">
+          <div tal:condition="python:learningobjectives and len(learningobjectives) > 0">
+            <h3>Learning Outcomes:</h3>
+            <div>
+              <i tal:content="c/outcomeheading"></i>
+            </div>
+            <ol style="list-style-type: lower-roman;">
+              <li tal:repeat="o learningobjectives"
+                  tal:content="string:${o/outcome}. [${o/mappingoutcomes}]"></li>
+            </ol>
+          </div>
+        </tal:learning-objectives>
+      </tal:undergrad>
+    
+      <tal:lecture-outline tal:define="lectureoutline python:api.lectureoutline.get(courseid=courseid);">
+        <div tal:condition="python:lectureoutline and len(lectureoutline) > 0">
+          <h3>Lecture Outline:</h3>
+          <table class="lecture-outline">
+            <thead>
+              <tr>
+                <th class="unit" tal:content="python: path('c/lecoutlineunitheading') or 'Unit Number'"></th>
+                <!--<th class="unit" tal:content="c/lecoutlineunitheading | string: Unit Number">Unit Number</th>-->
+                <th class="topic" tal:content="python: path('c/lecoutlineunitheading') or 'Topic'"></th>
+                <!--<th class="topic" tal:content="c/lecoutlinetopicheading | default">Topic</th>-->
+              </tr>
+            </thead>
+            <tbody>            
+              <tr tal:repeat="o lectureoutline">
+                <td class="unit" tal:content="o/unitnumber"></td>
+                <td class="topic" tal:content="o/topicitem"></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </tal:lecture-outline>
+    
+      <tal:lab-outline tal:define="laboutline python:api.laboutline.get(courseid=courseid);">
+        <div tal:condition="python:laboutline and len(laboutline) > 0">
+          <h3>Lab Outline:</h3>
+          <table class="lecture-outline">
+            <tr>
+              <th class="unit" tal:content="c/laboutlineunitheading"></th>
+              <th class="topic" tal:content="c/laboutlinetopicheading"></th>
+            </tr>
+            <tr tal:repeat="o laboutline">
+              <td class="unit" tal:content="o/unitnumber"></td>
+              <td class="topic" tal:content="o/topicitem"></td>
+            </tr>
+          </table>
+        </div>
+      </tal:lab-outline>
+    
+      <tal:undergrad tal:condition="python:type=='undergrad' and (c['establish'] or c['synthesis'] or c['analysis'] or c['construction'] or c['testing'] or c['evaluation'])">
+        <h3>Engineering Design Content:</h3>
+        <ul>
+          <li tal:condition="c/establish">Establishment of Objectives and Criteria</li>
+          <li tal:condition="c/synthesis">Synthesis</li>
+          <li tal:condition="c/analysis">Analysis</li>
+          <li tal:condition="c/construction">Construction</li>
+          <li tal:condition="c/testing">Testing</li>
+          <li tal:condition="c/evaluation">Evaluation</li>
+        </ul>
+      </tal:undergrad>
+    
+      <tal:undergrad tal:condition="python:type=='undergrad' and (c['economic'] or c['environmental'] or c['ethical'] or c['healthsafety'] or c['manufacturability'] or c['political'] or c['social'] or c['sustainability'] or c['addl1'] or c['addl2'])">
+        <h3>Engineering Design Consideration(s):</h3>
+        <ul>
+          <li tal:condition="c/economic">Economic</li>
+          <li tal:condition="c/environmental">Environmental</li>
+          <li tal:condition="c/ethical">Ethical</li>
+          <li tal:condition="c/healthsafety">Health/Safety</li>
+          <li tal:condition="c/manufacturability">Manufacturability</li>
+          <li tal:condition="c/political">Political</li>
+          <li tal:condition="c/social">Social</li>
+          <li tal:condition="c/sustainability">Sustainability</li>
+          <li tal:condition="c/addl1"><span tal:replace="c/addl1"/></li>
+          <li tal:condition="c/addl2"><span tal:replace="c/addl2"/></li>
+        </ul>
+      </tal:undergrad>
+    
+      <div tal:condition="python:c['assessmentmethod']">
+        <h3> Assessment Method:</h3>
+        <p tal:content="structure c/assessmentmethod"></p>
+      </div>
+    
+    </tal:course>
+  </tal:get-course>
+
+</tal:body>
+</tal:page>

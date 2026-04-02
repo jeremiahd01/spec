@@ -7,32 +7,53 @@
 
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
-  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Barlow:ital,wght@0,300;0,400;0,600;0,700;1,300&family=Barlow+Condensed:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,300;0,400;0,600;1,300&family=Space+Mono:wght@400;700&family=Barlow:ital,wght@0,300;0,400;0,600;0,700;1,300&family=Barlow+Condensed:wght@400;600;700&display=swap" rel="stylesheet" />
 
   <style>
-    /* ─── Design Tokens ─────────────────────────────────────── */
+    /* ─── Purdue Brand Tokens ────────────────────────────────── */
     :root {
-      --purdue-gold:      #CFB991;
-      --purdue-gold-dim:  #a8956e;
-      --purdue-gold-glow: rgba(207, 185, 145, 0.18);
-      --space-black:      #09090f;
-      --space-deep:       #0d0d1a;
-      --space-mid:        #13132a;
-      --space-panel:      #16162e;
-      --space-border:     rgba(207,185,145,0.15);
-      --text-primary:     #e8e4d8;
-      --text-muted:       #7a7a9a;
-      --status-red:       #c0392b;
-      --status-yellow:    #d4a017;
-      --status-green:     #27ae60;
-      --tracker-width:    280px;
+      /* Purdue official palette */
+      --purdue-gold:        #CFB991;   /* Boilermaker Gold */
+      --purdue-gold-aged:   #8E6F3E;   /* Aged Gold        */
+      --purdue-gold-rush:   #DAAA00;   /* Rush Gold        */
+      --purdue-gold-field:  #DDB945;   /* Field Gold       */
+      --purdue-gold-dust:   #EBD99F;   /* Dust Gold        */
+      --purdue-gold-dim:    #8E6F3E;
+      --purdue-gold-glow:   rgba(207,185,145,0.4);
+      --steel-gray:         #555960;   /* Purdue Steel Gray   */
+      --cool-gray:          #6F727B;   /* Purdue Cool Gray    */
+      --railway-gray:       #9D9795;   /* Purdue Railway Gray */
+      --steam-gray:         #C4BFC0;   /* Purdue Steam Gray   */
+
+      /* Light theme surfaces */
+      --bg-page:     #FFFFFF;
+      --bg-warm:     #F7F5F0;          /* warm off-white for header/accents */
+      --bg-panel:    #FFFFFF;          /* card backgrounds                  */
+      --bg-tint:     #F4F1EC;          /* subtle warm tint panels           */
+      --border-soft: rgba(142,111,62,0.18);  /* gold-tinted border          */
+      --border-rule: #E5E0D8;          /* section rules                     */
+
+      /* Text */
+      --text-primary:   #1a1a1a;
+      --text-muted:     #6F727B;   /* Cool Gray */
+
+      /* Kept as legacy aliases so JS-referenced CSS still resolves */
+      --space-black:    #000000;
+      --space-border:   rgba(142,111,62,0.18);
+
+      /* Status */
+      --status-inactive: #9D9795;
+      --status-yellow:   #DAAA00;  /* Rush Gold */
+      --status-green:    #27ae60;
+      --status-red:      #c0392b;
+
+      --tracker-width: 280px;
     }
 
-    /* ─── Base ───────────────────────────────────────────────── */
     *, *::before, *::after { box-sizing: border-box; }
     html { scroll-behavior: smooth; }
     body {
-      background-color: var(--space-black);
+      background-color: var(--bg-page);
       color: var(--text-primary);
       font-family: 'Barlow', sans-serif;
       font-weight: 300;
@@ -40,15 +61,10 @@
       overflow-x: hidden;
     }
 
-    /* ─── Star Canvas ────────────────────────────────────────── */
-    #star-canvas {
-      position: fixed;
-      inset: 0;
-      z-index: 0;
-      pointer-events: none;
-    }
+    /* ─── Star Canvas — hidden on light theme ─────────────────── */
+    #star-canvas { display: none; }
 
-    /* ─── Layout wrapper ─────────────────────────────────────── */
+    /* ─── Layout ─────────────────────────────────────────────── */
     .page-wrapper {
       position: relative;
       z-index: 1;
@@ -56,14 +72,30 @@
       max-width: 1280px;
       margin: 0 auto;
       padding-left: 32px;
-      padding-top: 0;
     }
 
-    /* ─── Page Header ────────────────────────────────────────── */
+    /* ─── Page Header — Purdue brand treatment ───────────────── */
     .page-header {
       padding: 56px 0 40px;
-      border-bottom: 1px solid var(--space-border);
       margin-bottom: 48px;
+      position: relative;
+      overflow: hidden;
+      border-bottom: 3px solid var(--purdue-gold);
+    }
+
+    /* Purdue 77° diagonal accent — more visible on light bg */
+    .page-header::after {
+      content: '';
+      position: absolute;
+      top: 0; right: -60px;
+      width: 55%;
+      height: 100%;
+      background: linear-gradient(
+        103deg,
+        transparent 38%,
+        rgba(207,185,145,0.12) 38%
+      );
+      pointer-events: none;
     }
 
     .overline {
@@ -71,19 +103,17 @@
       font-size: 0.7rem;
       letter-spacing: 0.25em;
       text-transform: uppercase;
-      color: var(--purdue-gold);
+      color: var(--purdue-gold-aged);
       margin-bottom: 12px;
       display: flex;
       align-items: center;
       gap: 10px;
     }
-
     .overline::before {
       content: '';
       display: inline-block;
-      width: 28px;
-      height: 1px;
-      background: var(--purdue-gold);
+      width: 28px; height: 2px;
+      background: var(--purdue-gold-rush);
     }
 
     .page-title {
@@ -95,8 +125,7 @@
       letter-spacing: -0.01em;
       margin-bottom: 16px;
     }
-
-    .page-title span { color: var(--purdue-gold); }
+    .page-title span { color: var(--purdue-gold-aged); }
 
     .page-subtitle {
       font-size: 1rem;
@@ -105,43 +134,28 @@
       line-height: 1.7;
     }
 
-    .requirement-pills {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-top: 24px;
-    }
-
+    .requirement-pills { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 24px; }
     .req-pill {
       font-family: 'Space Mono', monospace;
       font-size: 0.68rem;
       letter-spacing: 0.05em;
       padding: 5px 12px;
-      border: 1px solid var(--space-border);
+      border: 1px solid var(--border-soft);
       border-radius: 2px;
       color: var(--text-muted);
-      background: var(--space-panel);
+      background: var(--bg-tint);
     }
+    .req-pill strong { color: var(--purdue-gold-aged); }
 
-    .req-pill strong { color: var(--purdue-gold); }
-
-    /* ─── Section Block ──────────────────────────────────────── */
-    .course-section { margin-bottom: 52px; }
-
-    .section-header {
-      display: flex;
-      align-items: baseline;
-      gap: 14px;
-      margin-bottom: 6px;
-    }
-
+    /* ─── Section ────────────────────────────────────────────── */
+    .course-section { margin-bottom: 56px; }
+    .section-header { display: flex; align-items: baseline; gap: 14px; margin-bottom: 6px; }
     .section-index {
       font-family: 'Space Mono', monospace;
       font-size: 0.65rem;
-      color: var(--purdue-gold-dim);
+      color: var(--purdue-gold-aged);
       letter-spacing: 0.1em;
     }
-
     .section-title {
       font-family: 'Barlow Condensed', sans-serif;
       font-size: 1.3rem;
@@ -151,49 +165,145 @@
       color: var(--text-primary);
       margin: 0;
     }
-
-    .section-rule {
-      border: none;
-      border-top: 1px solid var(--space-border);
-      margin: 10px 0 20px;
-    }
-
+    .section-rule { border: none; border-top: 1px solid var(--border-rule); margin: 10px 0 20px; }
     .section-meta {
       font-family: 'Space Mono', monospace;
       font-size: 0.7rem;
       color: var(--text-muted);
-      margin-bottom: 20px;
+      margin-bottom: 24px;
       letter-spacing: 0.03em;
+      line-height: 1.6;
     }
+    .section-meta .target { color: var(--purdue-gold-aged); font-weight: 600; }
 
-    .section-meta .target { color: var(--purdue-gold); }
-
-    /* ─── Subcategory Header ─────────────────────────────────── */
-    .subcategory-header {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 22px 0 10px;
-      margin-top: 4px;
-    }
-
-    .subcategory-header:first-of-type { padding-top: 4px; }
-
-    .subcategory-label {
+    /* ─── Step Label ─────────────────────────────────────────── */
+    .step-label {
       font-family: 'Space Mono', monospace;
       font-size: 0.6rem;
-      letter-spacing: 0.14em;
+      letter-spacing: 0.18em;
       text-transform: uppercase;
-      color: var(--purdue-gold-dim);
-      white-space: nowrap;
+      color: var(--purdue-gold-aged);
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
     }
-
-    .subcategory-header::after {
+    .step-label::after {
       content: '';
       flex: 1;
       height: 1px;
-      background: rgba(207,185,145,0.1);
+      background: var(--border-rule);
     }
+
+    /* ─── Track Cards ────────────────────────────────────────── */
+    .track-options {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+      gap: 8px;
+      margin-bottom: 24px;
+    }
+    .track-card {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 14px 16px;
+      background: var(--bg-panel);
+      border: 1px solid var(--border-soft);
+      border-radius: 3px;
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
+      user-select: none;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+    }
+    .track-card:hover:not(.disabled) {
+      border-color: var(--purdue-gold-aged);
+      background: var(--bg-tint);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    .track-card.selected {
+      border-color: var(--purdue-gold-aged);
+      background: #FBF8F2;
+      box-shadow: 0 2px 8px rgba(142,111,62,0.15);
+    }
+    .track-card.disabled { opacity: 0.35; cursor: not-allowed; pointer-events: none; }
+
+    .track-radio-dot {
+      width: 16px; height: 16px;
+      border-radius: 50%;
+      border: 1.5px solid var(--steam-gray);
+      flex-shrink: 0;
+      margin-top: 3px;
+      position: relative;
+      transition: border-color 0.2s;
+    }
+    .track-card.selected .track-radio-dot { border-color: var(--purdue-gold-aged); }
+    .track-card.selected .track-radio-dot::after {
+      content: '';
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%,-50%);
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--purdue-gold-aged);
+    }
+    .track-card-name {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 1rem;
+      font-weight: 600;
+      letter-spacing: 0.03em;
+      color: var(--text-primary);
+      line-height: 1.25;
+    }
+    .track-card.selected .track-card-name { color: var(--purdue-gold-aged); }
+    .track-card-note {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.55rem;
+      color: var(--text-muted);
+      letter-spacing: 0.04em;
+      margin-top: 5px;
+    }
+
+    /* Sub-track selector */
+    .subtrack-selector {
+      padding: 16px 18px 8px;
+      border: 1px solid var(--border-soft);
+      border-radius: 3px;
+      background: var(--bg-tint);
+      margin-top: -16px;
+      margin-bottom: 24px;
+    }
+
+    /* ─── Section lock / placeholders ───────────────────────── */
+    .section-lock-msg {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 20px 24px;
+      border: 1px dashed var(--border-rule);
+      border-radius: 3px;
+      color: var(--text-muted);
+      font-family: 'Space Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.07em;
+      margin-bottom: 20px;
+      background: var(--bg-tint);
+    }
+    .section-lock-msg i { font-size: 1rem; color: var(--railway-gray); flex-shrink: 0; }
+
+    .course-locked-placeholder {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 22px 20px;
+      border: 1px dashed var(--border-rule);
+      border-radius: 3px;
+      color: var(--text-muted);
+      font-family: 'Space Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.07em;
+      background: var(--bg-tint);
+    }
+    .course-locked-placeholder i { color: var(--railway-gray); font-size: 0.9rem; }
 
     /* ─── Course Row ─────────────────────────────────────────── */
     .course-row {
@@ -204,152 +314,91 @@
       padding: 12px 18px;
       background: transparent;
       border: 1px solid transparent;
-      border-radius: 4px;
+      border-radius: 3px;
       margin-bottom: 4px;
-      transition: background 0.2s ease, border-color 0.2s ease;
+      transition: background 0.2s, border-color 0.2s;
       cursor: pointer;
-      position: relative;
     }
+    .course-row:hover { background: var(--bg-tint); border-color: var(--border-soft); }
+    .course-row.selected { background: #FBF8F2; border-color: rgba(142,111,62,0.35); }
+    .course-row.disabled-row { opacity: 0.35; pointer-events: none; }
 
-    .course-row:hover {
-      background: rgba(207, 185, 145, 0.05);
-      border-color: var(--space-border);
-    }
-
-    .course-row.selected {
-      background: rgba(207, 185, 145, 0.08);
-      border-color: rgba(207, 185, 145, 0.35);
-    }
-
-    .course-row.disabled-row {
-      opacity: 0.3;
-      pointer-events: none;
-    }
-
-    /* Custom checkbox */
     .course-check {
-      appearance: none;
-      -webkit-appearance: none;
-      width: 18px;
-      height: 18px;
-      border: 1.5px solid var(--purdue-gold-dim);
+      appearance: none; -webkit-appearance: none;
+      width: 18px; height: 18px;
+      border: 1.5px solid var(--steam-gray);
       border-radius: 2px;
       background: transparent;
       cursor: pointer;
-      position: relative;
-      flex-shrink: 0;
+      position: relative; flex-shrink: 0;
       transition: background 0.2s, border-color 0.2s;
     }
-
-    .course-check:checked {
-      background: var(--purdue-gold);
-      border-color: var(--purdue-gold);
-    }
-
+    .course-check:checked { background: var(--purdue-gold-aged); border-color: var(--purdue-gold-aged); }
     .course-check:checked::after {
       content: '';
       position: absolute;
-      top: 2px;
-      left: 5px;
-      width: 5px;
-      height: 9px;
-      border: 2px solid var(--space-black);
-      border-top: none;
-      border-left: none;
+      top: 2px; left: 5px;
+      width: 5px; height: 9px;
+      border: 2px solid #ffffff;
+      border-top: none; border-left: none;
       transform: rotate(45deg);
     }
+    .course-check:focus { outline: none; box-shadow: 0 0 0 3px var(--purdue-gold-glow); }
 
-    .course-check:focus { outline: none; box-shadow: 0 0 0 2px var(--purdue-gold-glow); }
-
-    /* Custom radio */
     .course-radio {
-      appearance: none;
-      -webkit-appearance: none;
-      width: 18px;
-      height: 18px;
-      border: 1.5px solid var(--purdue-gold-dim);
+      appearance: none; -webkit-appearance: none;
+      width: 18px; height: 18px;
+      border: 1.5px solid var(--steam-gray);
       border-radius: 50%;
       background: transparent;
       cursor: pointer;
-      position: relative;
-      flex-shrink: 0;
+      position: relative; flex-shrink: 0;
       transition: background 0.2s, border-color 0.2s;
     }
-
-    .course-radio:checked {
-      background: var(--purdue-gold);
-      border-color: var(--purdue-gold);
-    }
-
+    .course-radio:checked { background: var(--purdue-gold-aged); border-color: var(--purdue-gold-aged); }
     .course-radio:checked::after {
       content: '';
       position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 6px;
-      height: 6px;
+      top: 50%; left: 50%;
+      transform: translate(-50%,-50%);
+      width: 6px; height: 6px;
       border-radius: 50%;
-      background: var(--space-black);
+      background: #ffffff;
     }
+    .course-radio:focus { outline: none; box-shadow: 0 0 0 3px var(--purdue-gold-glow); }
 
-    .course-radio:focus { outline: none; box-shadow: 0 0 0 2px var(--purdue-gold-glow); }
-
-    /* Course text */
     .course-code {
       font-family: 'Space Mono', monospace;
       font-size: 0.72rem;
-      color: var(--purdue-gold);
+      color: var(--purdue-gold-aged);
       letter-spacing: 0.04em;
     }
-
     .course-name {
       font-size: 0.95rem;
       font-weight: 400;
       color: var(--text-primary);
       line-height: 1.3;
     }
-
     .course-credits-badge {
       font-family: 'Space Mono', monospace;
       font-size: 0.7rem;
       padding: 3px 8px;
-      border: 1px solid var(--space-border);
+      border: 1px solid var(--border-rule);
       border-radius: 2px;
       color: var(--text-muted);
       text-align: center;
       white-space: nowrap;
       transition: border-color 0.2s, color 0.2s;
     }
+    .course-row.selected .course-credits-badge { border-color: var(--purdue-gold-aged); color: var(--purdue-gold-aged); }
 
-    .course-row.selected .course-credits-badge {
-      border-color: var(--purdue-gold-dim);
-      color: var(--purdue-gold);
-    }
-
-    /* N/A practical row styling */
     .course-row.na-option .course-code { color: var(--text-muted); }
-    .course-row.na-option:hover {
-      background: rgba(255,255,255,0.02);
-      border-color: rgba(255,255,255,0.08);
-    }
-    .course-row.na-option.selected {
-      background: rgba(255,255,255,0.04);
-      border-color: rgba(255,255,255,0.15);
-    }
-    .course-row.na-option.selected .course-credits-badge {
-      border-color: var(--text-muted);
-      color: var(--text-muted);
-    }
-    .course-row.na-option .course-radio {
-      border-color: rgba(255,255,255,0.25);
-    }
-    .course-row.na-option .course-radio:checked {
-      background: var(--text-muted);
-      border-color: var(--text-muted);
-    }
+    .course-row.na-option .course-radio { border-color: var(--steam-gray); }
+    .course-row.na-option .course-radio:checked { background: var(--cool-gray); border-color: var(--cool-gray); }
+    .course-row.na-option.selected { background: #F5F5F5; border-color: #C4BFC0; }
+    .course-row.na-option.selected .course-credits-badge { border-color: var(--railway-gray); color: var(--text-muted); }
 
-    /* ─── Practical section note ─────────────────────────────── */
+    /* ─── Practical note ─────────────────────────────────────── */
     .practical-note {
       font-family: 'Space Mono', monospace;
       font-size: 0.65rem;
@@ -357,36 +406,33 @@
       line-height: 1.7;
       letter-spacing: 0.03em;
       padding: 14px 18px;
-      border: 1px solid var(--space-border);
-      border-radius: 4px;
-      background: rgba(207,185,145,0.03);
+      border: 1px solid var(--border-soft);
+      border-left: 3px solid var(--purdue-gold);
+      border-radius: 3px;
+      background: var(--bg-tint);
       margin-bottom: 20px;
     }
-
-    .practical-note .highlight { color: var(--purdue-gold); }
-
-    /* ─── N/A warning banner ─────────────────────────────────── */
+    .practical-note .highlight { color: var(--purdue-gold-aged); font-weight: 600; }
     .na-warning {
       font-family: 'Space Mono', monospace;
       font-size: 0.65rem;
-      color: var(--status-yellow);
+      color: #7a5c00;
       letter-spacing: 0.04em;
       line-height: 1.6;
       padding: 10px 14px;
-      border: 1px solid rgba(212,160,23,0.3);
+      border: 1px solid rgba(218,170,0,0.4);
+      border-left: 3px solid var(--purdue-gold-rush);
       border-radius: 3px;
-      background: rgba(212,160,23,0.06);
+      background: rgba(218,170,0,0.07);
       margin-top: 12px;
       display: none;
     }
-
     .na-warning.visible { display: block; }
 
-    /* ─── Floating Tracker Panel ─────────────────────────────── */
+    /* ─── Floating Tracker ───────────────────────────────────── */
     #tracker {
       position: fixed;
-      top: 32px;
-      right: 24px;
+      top: 32px; right: 24px;
       width: var(--tracker-width);
       z-index: 1000;
       display: flex;
@@ -396,7 +442,6 @@
       overflow-y: auto;
       scrollbar-width: none;
     }
-
     #tracker::-webkit-scrollbar { display: none; }
 
     .tracker-header {
@@ -404,59 +449,45 @@
       font-size: 0.6rem;
       letter-spacing: 0.2em;
       text-transform: uppercase;
-      color: var(--purdue-gold-dim);
+      color: var(--purdue-gold-aged);
       padding: 0 4px 6px;
-      border-bottom: 1px solid var(--space-border);
+      border-bottom: 2px solid var(--purdue-gold);
       margin-bottom: 2px;
       display: flex;
       align-items: center;
       gap: 8px;
     }
-
     .tracker-header .dot {
-      width: 6px;
-      height: 6px;
+      width: 6px; height: 6px;
       border-radius: 50%;
-      background: var(--purdue-gold);
+      background: var(--purdue-gold-rush);
       animation: pulse-dot 2s ease-in-out infinite;
     }
+    @keyframes pulse-dot { 0%,100%{ opacity:1; } 50%{ opacity:0.3; } }
 
-    @keyframes pulse-dot {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.3; }
-    }
-
-    /* Tracker Card */
     .tracker-card {
-      background: var(--space-panel);
-      border: 1px solid var(--space-border);
-      border-radius: 4px;
+      background: var(--bg-panel);
+      border: 1px solid var(--border-soft);
+      border-radius: 3px;
       padding: 14px 14px 12px;
-      transition: border-color 0.3s ease, opacity 0.3s ease;
+      transition: border-color 0.3s, opacity 0.3s;
       position: relative;
       overflow: hidden;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.07);
     }
-
     .tracker-card::before {
       content: '';
       position: absolute;
       top: 0; left: 0;
       width: 3px; height: 100%;
-      background: var(--status-red);
-      transition: background 0.4s ease;
+      background: var(--steam-gray);
+      transition: background 0.4s;
     }
-
-    .tracker-card.status-yellow::before { background: var(--status-yellow); }
+    .tracker-card.status-yellow::before { background: var(--purdue-gold-rush); }
     .tracker-card.status-green::before  { background: var(--status-green); }
-
-    .tracker-card.status-green { border-color: rgba(39, 174, 96, 0.3); }
-
-    /* N/A mode for practical card */
-    .tracker-card.na-mode {
-      opacity: 0.45;
-      border-color: rgba(255,255,255,0.08);
-    }
-    .tracker-card.na-mode::before { background: var(--text-muted); }
+    .tracker-card.status-green { border-color: rgba(39,174,96,0.35); box-shadow: 0 2px 8px rgba(39,174,96,0.1); }
+    .tracker-card.na-mode { opacity: 0.45; border-color: var(--border-rule); }
+    .tracker-card.na-mode::before { background: var(--steam-gray); }
 
     .tracker-card-label {
       font-family: 'Space Mono', monospace;
@@ -464,58 +495,52 @@
       letter-spacing: 0.12em;
       text-transform: uppercase;
       color: var(--text-muted);
+      margin-bottom: 4px;
+      line-height: 1.4;
+    }
+    .tracker-track-name {
+      display: block;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.55rem;
+      color: var(--purdue-gold-aged);
+      letter-spacing: 0.04em;
+      text-transform: none;
+      margin-top: 2px;
       margin-bottom: 8px;
       line-height: 1.4;
     }
 
-    .tracker-tally {
-      display: flex;
-      align-items: baseline;
-      gap: 4px;
-      margin-bottom: 10px;
-    }
-
+    .tracker-tally { display: flex; align-items: baseline; gap: 4px; margin-bottom: 10px; }
     .tally-current {
       font-family: 'Barlow Condensed', sans-serif;
       font-size: 2rem;
       font-weight: 700;
       color: var(--text-primary);
       line-height: 1;
-      transition: color 0.3s ease;
+      transition: color 0.3s;
     }
-
     .tracker-card.status-green .tally-current { color: var(--status-green); }
-
-    .tally-sep {
+    .tally-sep, .tally-target {
       font-family: 'Space Mono', monospace;
       font-size: 0.75rem;
       color: var(--text-muted);
     }
 
-    .tally-target {
-      font-family: 'Space Mono', monospace;
-      font-size: 0.75rem;
-      color: var(--text-muted);
-    }
-
-    /* Progress bar */
     .tracker-progress {
       height: 4px;
-      background: rgba(255,255,255,0.07);
+      background: var(--border-rule);
       border-radius: 2px;
       overflow: hidden;
       margin-bottom: 7px;
     }
-
     .tracker-bar {
       height: 100%;
       border-radius: 2px;
-      background: var(--status-red);
+      background: var(--steam-gray);
       width: 0%;
-      transition: width 0.4s cubic-bezier(0.22, 1, 0.36, 1), background 0.4s ease;
+      transition: width 0.4s cubic-bezier(0.22,1,0.36,1), background 0.4s;
     }
-
-    .tracker-bar.yellow { background: var(--status-yellow); }
+    .tracker-bar.yellow { background: var(--purdue-gold-rush); }
     .tracker-bar.green  { background: var(--status-green); }
 
     .tracker-status-text {
@@ -524,10 +549,8 @@
       color: var(--text-muted);
       letter-spacing: 0.06em;
     }
-
     .tracker-card.status-green .tracker-status-text { color: var(--status-green); }
 
-    /* N/A note inside tracker card */
     .tracker-na-note {
       display: none;
       font-family: 'Space Mono', monospace;
@@ -538,13 +561,10 @@
       margin-top: 6px;
     }
 
-    /* Complete check icon */
     .complete-icon {
       position: absolute;
-      top: 12px;
-      right: 12px;
-      width: 18px;
-      height: 18px;
+      top: 12px; right: 12px;
+      width: 18px; height: 18px;
       border-radius: 50%;
       background: var(--status-green);
       display: flex;
@@ -552,36 +572,12 @@
       justify-content: center;
       opacity: 0;
       transform: scale(0.5);
-      transition: opacity 0.3s ease, transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+      transition: opacity 0.3s, transform 0.35s cubic-bezier(0.34,1.56,0.64,1);
     }
-
     .complete-icon i { font-size: 0.6rem; color: white; }
+    .tracker-card.status-green .complete-icon { opacity: 1; transform: scale(1); }
 
-    .tracker-card.status-green .complete-icon {
-      opacity: 1;
-      transform: scale(1);
-    }
-
-    /* Total card */
-    .tracker-card.total-card {
-      background: var(--space-mid);
-      border-color: rgba(207,185,145,0.2);
-      margin-top: 4px;
-    }
-
-    .tracker-card.total-card.status-green {
-      border-color: rgba(39, 174, 96, 0.4);
-      background: rgba(39, 174, 96, 0.06);
-    }
-
-    /* Selected course list */
-    .tracker-courses {
-      margin-top: 8px;
-      display: flex;
-      flex-direction: column;
-      gap: 3px;
-    }
-
+    .tracker-courses { margin-top: 8px; display: flex; flex-direction: column; gap: 3px; }
     .tracker-course-item {
       font-family: 'Space Mono', monospace;
       font-size: 0.56rem;
@@ -591,98 +587,379 @@
       justify-content: space-between;
       align-items: center;
       padding: 2px 0;
-      border-bottom: 1px solid rgba(255,255,255,0.04);
+      border-bottom: 1px solid var(--border-rule);
       opacity: 0;
       transform: translateY(4px);
       animation: fadein-up 0.25s ease forwards;
     }
+    @keyframes fadein-up { to { opacity:1; transform:translateY(0); } }
 
-    @keyframes fadein-up { to { opacity: 1; transform: translateY(0); } }
-
-    /* Action row */
-    .action-row {
-      margin: 48px 0 64px;
-      display: flex;
-      gap: 12px;
-      align-items: center;
-      flex-wrap: wrap;
+    .tracker-card.total-card {
+      background: var(--bg-tint);
+      border-color: var(--border-soft);
+      margin-top: 4px;
     }
+    .tracker-card.total-card.status-green {
+      border-color: rgba(39,174,96,0.4);
+      background: rgba(39,174,96,0.05);
+    }
+
+    /* ─── Action Row ─────────────────────────────────────────── */
+    .action-row { margin: 48px 0 64px; display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
 
     .btn-generate {
       font-family: 'Barlow Condensed', sans-serif;
-      font-size: 1rem;
-      font-weight: 600;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
+      font-size: 1rem; font-weight: 600;
+      letter-spacing: 0.08em; text-transform: uppercase;
       padding: 12px 28px;
-      background: var(--purdue-gold);
-      color: var(--space-black);
-      border: none;
-      border-radius: 3px;
+      background: #000000;
+      color: var(--purdue-gold);
+      border: none; border-radius: 3px;
       cursor: pointer;
-      transition: background 0.2s ease, transform 0.15s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: background 0.2s, color 0.2s, transform 0.15s;
     }
-
-    .btn-generate:hover:not(:disabled) { background: #e0cab0; transform: translateY(-1px); }
+    .btn-generate:hover:not(:disabled) { background: var(--purdue-gold-aged); color: #ffffff; transform: translateY(-1px); }
     .btn-generate:disabled { opacity: 0.35; cursor: not-allowed; }
 
     .btn-reset {
       font-family: 'Space Mono', monospace;
-      font-size: 0.7rem;
-      letter-spacing: 0.05em;
+      font-size: 0.7rem; letter-spacing: 0.05em;
       padding: 12px 18px;
       background: transparent;
       color: var(--text-muted);
-      border: 1px solid var(--space-border);
-      border-radius: 3px;
-      cursor: pointer;
-      transition: color 0.2s, border-color 0.2s;
+      border: 1px solid var(--border-soft);
+      border-radius: 3px; cursor: pointer;
+      transition: color 0.2s, border-color 0.2s, background 0.2s;
     }
-
-    .btn-reset:hover { color: var(--text-primary); border-color: var(--purdue-gold-dim); }
+    .btn-reset:hover { color: var(--text-primary); border-color: var(--purdue-gold-aged); background: var(--bg-tint); }
 
     /* ─── Responsive ─────────────────────────────────────────── */
     @media (max-width: 992px) {
       .page-wrapper { padding-right: 32px; }
-
       #tracker {
-        position: fixed;
-        bottom: 0; top: auto;
-        right: 0; left: 0;
-        width: 100%;
-        max-height: 40vh;
-        flex-direction: row;
-        flex-wrap: nowrap;
-        overflow-x: auto;
-        overflow-y: hidden;
-        gap: 6px;
-        padding: 10px 16px;
-        background: rgba(9,9,15,0.96);
+        position: fixed; bottom: 0; top: auto; right: 0; left: 0;
+        width: 100%; max-height: 40vh;
+        flex-direction: row; flex-wrap: nowrap;
+        overflow-x: auto; overflow-y: hidden;
+        gap: 6px; padding: 10px 16px;
+        background: rgba(255,255,255,0.97);
         backdrop-filter: blur(12px);
-        border-top: 1px solid var(--space-border);
+        border-top: 2px solid var(--purdue-gold);
+        box-shadow: 0 -4px 20px rgba(0,0,0,0.1);
         scrollbar-width: none;
       }
-
       #tracker::-webkit-scrollbar { display: none; }
       .tracker-header { display: none; }
       .tracker-card { min-width: 150px; flex-shrink: 0; }
-      .tracker-courses { display: none; }
-      .tracker-na-note { display: none !important; }
+      .tracker-courses, .tracker-na-note { display: none !important; }
       body { padding-bottom: 200px; }
+      .track-options { grid-template-columns: 1fr; }
+    }
+
+    /* ════════════════════════════════════════════════════════════
+       PRINT STYLES — shown only when printing / saving as PDF
+    ════════════════════════════════════════════════════════════ */
+    #print-summary { display: none; }
+
+    @media print {
+      /* Hide the interactive UI */
+      #star-canvas,
+      #tracker,
+      .page-wrapper { display: none !important; }
+
+      /* Show the print layout */
+      #print-summary { display: block !important; }
+
+      body {
+        background: #ffffff !important;
+        color: #000000 !important;
+        font-family: 'Source Serif 4', Georgia, serif !important;
+        font-size: 10pt;
+        margin: 0;
+        padding: 0;
+      }
+
+      /* ── Print header ── */
+      .ps-header {
+        padding: 0 0 16pt;
+        margin-bottom: 20pt;
+        border-bottom: 3pt solid #CFB991;
+        position: relative;
+      }
+
+      /* Diagonal accent in print header */
+      .ps-header::after {
+        content: '';
+        position: absolute;
+        top: 0; right: 0;
+        width: 45%;
+        height: 100%;
+        background: linear-gradient(103deg, transparent 40%, rgba(207,185,145,0.08) 40%);
+        pointer-events: none;
+      }
+
+      .ps-institution {
+        font-family: 'Barlow Condensed', Impact, 'Franklin Gothic Medium', sans-serif;
+        font-size: 7pt;
+        letter-spacing: 0.28em;
+        text-transform: uppercase;
+        color: #8E6F3E;
+        margin-bottom: 5pt;
+      }
+
+      .ps-program {
+        font-family: 'Barlow Condensed', Impact, sans-serif;
+        font-size: 22pt;
+        font-weight: 700;
+        letter-spacing: -0.01em;
+        color: #000000;
+        line-height: 1.05;
+      }
+
+      .ps-program span { color: #8E6F3E; }
+
+      .ps-doc-meta {
+        margin-top: 8pt;
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+      }
+
+      .ps-doc-type {
+        font-family: 'Barlow Condensed', sans-serif;
+        font-size: 11pt;
+        font-weight: 600;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        color: #555960;
+      }
+
+      .ps-date {
+        font-family: 'Space Mono', monospace;
+        font-size: 7.5pt;
+        color: #9D9795;
+        letter-spacing: 0.04em;
+      }
+
+      /* ── Print sections ── */
+      .ps-section {
+        margin-bottom: 16pt;
+        break-inside: avoid;
+      }
+
+      .ps-section-title {
+        font-family: 'Barlow Condensed', Impact, sans-serif;
+        font-size: 10pt;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: #000000;
+        padding-bottom: 4pt;
+        border-bottom: 1pt solid #CFB991;
+        margin-bottom: 8pt;
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+      }
+
+      .ps-section-credits {
+        font-family: 'Space Mono', monospace;
+        font-size: 7.5pt;
+        color: #8E6F3E;
+        letter-spacing: 0.05em;
+        font-weight: normal;
+        text-transform: none;
+      }
+
+      .ps-track-name {
+        font-family: 'Barlow', sans-serif;
+        font-size: 8.5pt;
+        font-weight: 400;
+        color: #555960;
+        letter-spacing: 0;
+        text-transform: none;
+        margin-bottom: 6pt;
+        display: block;
+      }
+
+      /* ── Course table ── */
+      .ps-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 9pt;
+      }
+      .ps-table thead tr {
+        border-bottom: 1pt solid #DDB945;
+      }
+      .ps-table th {
+        text-align: left;
+        font-family: 'Space Mono', monospace;
+        font-size: 6.5pt;
+        font-weight: normal;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: #9D9795;
+        padding: 3pt 6pt;
+      }
+      .ps-table td {
+        padding: 4pt 6pt;
+        border-bottom: 0.5pt solid #f0f0f0;
+        color: #000000;
+        font-family: 'Source Serif 4', Georgia, serif;
+        font-size: 9pt;
+      }
+      .ps-table td.td-code {
+        font-family: 'Space Mono', monospace;
+        font-size: 7.5pt;
+        color: #8E6F3E;
+        white-space: nowrap;
+      }
+      .ps-table td.td-credits {
+        text-align: right;
+        white-space: nowrap;
+        color: #555960;
+        font-family: 'Space Mono', monospace;
+        font-size: 7.5pt;
+      }
+
+      /* ── Practical block ── */
+      .ps-practical-status {
+        font-size: 9pt;
+        color: #000;
+        padding: 6pt 8pt;
+        background: #f9f7f3;
+        border-left: 2pt solid #CFB991;
+      }
+
+      /* ── Grand total ── */
+      .ps-totals {
+        margin-top: 20pt;
+        padding-top: 12pt;
+        border-top: 2pt solid #CFB991;
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        break-inside: avoid;
+      }
+      .ps-total-label {
+        font-family: 'Barlow Condensed', sans-serif;
+        font-size: 11pt;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: #000;
+      }
+      .ps-total-value {
+        font-family: 'Barlow Condensed', sans-serif;
+        font-size: 16pt;
+        font-weight: 700;
+        color: #8E6F3E;
+      }
+      .ps-total-min {
+        font-family: 'Space Mono', monospace;
+        font-size: 7.5pt;
+        color: #9D9795;
+        margin-left: 6pt;
+      }
+
+      /* ── Footer ── */
+      .ps-footer {
+        margin-top: 28pt;
+        padding-top: 8pt;
+        border-top: 0.5pt solid #ddd;
+        font-family: 'Space Mono', monospace;
+        font-size: 6.5pt;
+        color: #9D9795;
+        letter-spacing: 0.04em;
+        display: flex;
+        justify-content: space-between;
+      }
     }
   </style>
 </head>
-
 <body>
+
+<!-- ── PRINT SUMMARY (hidden on screen, shown when printing) ── -->
+<div id="print-summary">
+  <div class="ps-header">
+    <div class="ps-institution">Purdue University · College of Engineering</div>
+    <div class="ps-program">Space Engineering <span>Certificate Program</span></div>
+    <div class="ps-doc-meta">
+      <div class="ps-doc-type">Plan of Study</div>
+      <div class="ps-date" id="ps-date"></div>
+    </div>
+  </div>
+
+  <!-- Seminar -->
+  <div class="ps-section" id="ps-seminar">
+    <div class="ps-section-title">
+      <span>01 — Space Engineering Seminar</span>
+      <span class="ps-section-credits" id="ps-seminar-credits"></span>
+    </div>
+    <table class="ps-table">
+      <thead><tr><th>Course ID</th><th>Course Name</th><th style="text-align:right">Credits</th></tr></thead>
+      <tbody id="ps-seminar-body"></tbody>
+    </table>
+  </div>
+
+  <!-- Primary -->
+  <div class="ps-section" id="ps-primary">
+    <div class="ps-section-title">
+      <span>02 — Primary Track</span>
+      <span class="ps-section-credits" id="ps-primary-credits"></span>
+    </div>
+    <span class="ps-track-name" id="ps-primary-track"></span>
+    <table class="ps-table">
+      <thead><tr><th>Course ID</th><th>Course Name</th><th style="text-align:right">Credits</th></tr></thead>
+      <tbody id="ps-primary-body"></tbody>
+    </table>
+  </div>
+
+  <!-- Secondary -->
+  <div class="ps-section" id="ps-secondary">
+    <div class="ps-section-title">
+      <span>03 — Secondary Track</span>
+      <span class="ps-section-credits" id="ps-secondary-credits"></span>
+    </div>
+    <span class="ps-track-name" id="ps-secondary-track"></span>
+    <table class="ps-table">
+      <thead><tr><th>Course ID</th><th>Course Name</th><th style="text-align:right">Credits</th></tr></thead>
+      <tbody id="ps-secondary-body"></tbody>
+    </table>
+  </div>
+
+  <!-- Practical -->
+  <div class="ps-section">
+    <div class="ps-section-title">
+      <span>04 — Practical Aerospace Experience</span>
+      <span class="ps-section-credits" id="ps-practical-credits"></span>
+    </div>
+    <div class="ps-practical-status" id="ps-practical-status"></div>
+  </div>
+
+  <!-- Totals -->
+  <div class="ps-totals">
+    <div class="ps-total-label">Total Certificate Credits</div>
+    <div>
+      <span class="ps-total-value" id="ps-total-value">0</span>
+      <span class="ps-total-min">cr (16 cr minimum)</span>
+    </div>
+  </div>
+
+  <div class="ps-footer">
+    <span>Purdue University Space Engineering Certificate — purdue.edu</span>
+    <span id="ps-footer-date"></span>
+  </div>
+</div>
 
 <canvas id="star-canvas"></canvas>
 
 <!-- ── FLOATING TRACKER ─────────────────────────────────────── -->
 <div id="tracker">
-  <div class="tracker-header">
-    <span class="dot"></span>
-    Credit Tracker
-  </div>
+  <div class="tracker-header"><span class="dot"></span>Credit Tracker</div>
 
   <div class="tracker-card" id="card-seminar">
     <div class="complete-icon"><i class="bi bi-check-lg"></i></div>
@@ -693,33 +970,35 @@
       <span class="tally-target">1 cr</span>
     </div>
     <div class="tracker-progress"><div class="tracker-bar" id="bar-seminar"></div></div>
-    <div class="tracker-status-text" id="status-seminar">0 of 1 credit selected</div>
+    <div class="tracker-status-text" id="status-seminar">1 cr required</div>
     <div class="tracker-courses" id="courses-seminar"></div>
   </div>
 
   <div class="tracker-card" id="card-primary">
     <div class="complete-icon"><i class="bi bi-check-lg"></i></div>
-    <div class="tracker-card-label">Primary Space<br>Industry</div>
+    <div class="tracker-card-label">Primary Track</div>
+    <span class="tracker-track-name" id="primary-tracker-track">— Not Selected</span>
     <div class="tracker-tally">
       <span class="tally-current" id="tally-primary">0</span>
       <span class="tally-sep">/</span>
       <span class="tally-target">9+ cr</span>
     </div>
     <div class="tracker-progress"><div class="tracker-bar" id="bar-primary"></div></div>
-    <div class="tracker-status-text" id="status-primary">9 cr minimum required</div>
+    <div class="tracker-status-text" id="status-primary">Select a track first</div>
     <div class="tracker-courses" id="courses-primary"></div>
   </div>
 
   <div class="tracker-card" id="card-secondary">
     <div class="complete-icon"><i class="bi bi-check-lg"></i></div>
-    <div class="tracker-card-label">Secondary Space<br>Industry</div>
+    <div class="tracker-card-label">Secondary Track</div>
+    <span class="tracker-track-name" id="secondary-tracker-track">— Not Selected</span>
     <div class="tracker-tally">
       <span class="tally-current" id="tally-secondary">0</span>
       <span class="tally-sep">/</span>
       <span class="tally-target">3+ cr</span>
     </div>
     <div class="tracker-progress"><div class="tracker-bar" id="bar-secondary"></div></div>
-    <div class="tracker-status-text" id="status-secondary">3 cr minimum required</div>
+    <div class="tracker-status-text" id="status-secondary">Select a track first</div>
     <div class="tracker-courses" id="courses-secondary"></div>
   </div>
 
@@ -728,13 +1007,12 @@
     <div class="tracker-card-label">Practical Aerospace<br>Experience</div>
     <div class="tracker-tally">
       <span class="tally-current" id="tally-practical">—</span>
-      <span class="tally-sep" id="tally-practical-sep">/</span>
-      <span class="tally-target" id="tally-practical-target">0–3 cr</span>
+      <span class="tally-sep" id="tally-practical-sep" style="visibility:hidden">/</span>
+      <span class="tally-target" id="tally-practical-target" style="visibility:hidden">0–3 cr</span>
     </div>
     <div class="tracker-progress"><div class="tracker-bar" id="bar-practical"></div></div>
     <div class="tracker-status-text" id="status-practical">Select an option below</div>
     <div class="tracker-na-note" id="practical-na-note">Select 3 additional credits<br>from Primary or Secondary above.</div>
-    <div class="tracker-courses" id="courses-practical"></div>
   </div>
 
   <div class="tracker-card total-card" id="card-total">
@@ -757,13 +1035,14 @@
     <div class="overline">Purdue University · College of Engineering</div>
     <h1 class="page-title">Space Engineering<br><span>Certificate Program</span></h1>
     <p class="page-subtitle">
-      Select courses from each of the four categories below to complete your certificate requirements. A minimum of 16 credit hours must be fulfilled across all categories.
+      Select a primary and secondary track, then choose courses to meet the credit requirements.
+      A minimum of 16 total credit hours must be fulfilled across all categories.
     </p>
     <div class="requirement-pills">
       <div class="req-pill"><strong>1 cr</strong> &nbsp;Space Engineering Seminar</div>
-      <div class="req-pill"><strong>9+ cr</strong> &nbsp;Primary Space Industry</div>
-      <div class="req-pill"><strong>3+ cr</strong> &nbsp;Secondary Space Industry</div>
-      <div class="req-pill"><strong>0–3 cr</strong> &nbsp;Practical Aerospace Experience</div>
+      <div class="req-pill"><strong>9+ cr</strong> &nbsp;Primary Track</div>
+      <div class="req-pill"><strong>3+ cr</strong> &nbsp;Secondary Track</div>
+      <div class="req-pill"><strong>0–3 cr</strong> &nbsp;Practical Experience</div>
       <div class="req-pill"><strong>16+ cr</strong> &nbsp;Total Minimum</div>
     </div>
   </div>
@@ -775,11 +1054,8 @@
       <h2 class="section-title">Space Engineering Seminar</h2>
     </div>
     <hr class="section-rule" />
-    <p class="section-meta">
-      Required: <span class="target">1 credit hour</span>
-    </p>
-
-    <div class="course-list" data-category="seminar">
+    <p class="section-meta">Required: <span class="target">1 credit hour</span></p>
+    <div id="seminar-course-list">
       <label class="course-row" data-credits="1" data-course-code="ENGR 10351">
         <input class="course-check" type="checkbox" data-credits="1" />
         <div>
@@ -791,689 +1067,61 @@
     </div>
   </div>
 
-  <!-- ─── SECTION 2: PRIMARY ────────────────────────────────── -->
+  <!-- ─── SECTION 2: PRIMARY TRACK ────────────────────────── -->
   <div class="course-section" id="section-primary">
     <div class="section-header">
       <span class="section-index">02 —</span>
-      <h2 class="section-title">Primary Space Industry</h2>
+      <h2 class="section-title">Primary Track Selection</h2>
     </div>
     <hr class="section-rule" />
     <p class="section-meta">
-      Select courses totaling at least <span class="target">9 credit hours</span> from one or more topic areas below.
-      Courses cannot be counted for both Primary and Secondary areas.
+      Choose your primary track and select a minimum of <span class="target">9 credit hours</span>.
+      Courses appearing in multiple tracks count toward either Primary or Secondary — not both.
     </p>
-
-    <div class="course-list" data-category="primary">
-
-      <div class="subcategory-header"><span class="subcategory-label">Habitat Design including ISRU</span></div>
-
-      <label class="course-row" data-credits="3" data-course-code="AAE 55200">
-        <input class="course-check" type="checkbox" data-credits="3" />
-        <div><div class="course-code">AAE 55200</div><div class="course-name">Nondestructive Evaluation Of Structures And Materials</div></div>
-        <div class="course-credits-badge">3 credits</div>
-      </label>
-
-      <label class="course-row" data-credits="3" data-course-code="AAE 55300">
-        <input class="course-check" type="checkbox" data-credits="3" />
-        <div><div class="course-code">AAE 55300</div><div class="course-name">Elasticity In Aerospace Engineering</div></div>
-        <div class="course-credits-badge">3 credits</div>
-      </label>
-
-      <label class="course-row" data-credits="3" data-course-code="AAE 55400">
-        <input class="course-check" type="checkbox" data-credits="3" />
-        <div><div class="course-code">AAE 55400</div><div class="course-name">Fatigue Of Structures And Materials</div></div>
-        <div class="course-credits-badge">3 credits</div>
-      </label>
-
-      <label class="course-row" data-credits="3" data-course-code="AAE 55800">
-        <input class="course-check" type="checkbox" data-credits="3" />
-        <div><div class="course-code">AAE 55800</div><div class="course-name">Finite Element Methods In Aerospace Structures</div></div>
-        <div class="course-credits-badge">3 credits</div>
-      </label>
-
-      <label class="course-row" data-credits="3" data-course-code="AAE 57100">
-        <input class="course-check" type="checkbox" data-credits="3" />
-        <div><div class="course-code">AAE 57100</div><div class="course-name">Complex System Safety</div></div>
-        <div class="course-credits-badge">3 credits</div>
-      </label>
-
-      <label class="course-row" data-credits="4" data-course-code="CE 47300">
-        <input class="course-check" type="checkbox" data-credits="4" />
-        <div><div class="course-code">CE 47300</div><div class="course-name">Reinforced Concrete Design</div></div>
-        <div class="course-credits-badge">4 credits</div>
-      </label>
-
-      <label class="course-row" data-credits="3" data-course-code="CE 47400">
-        <input class="course-check" type="checkbox" data-credits="3" />
-        <div><div class="course-code">CE 47400</div><div class="course-name">Structural Analysis II</div></div>
-        <div class="course-credits-badge">3 credits</div>
-      </label>
-
-      <label class="course-row" data-credits="3" data-course-code="CE 48300">
-        <input class="course-check" type="checkbox" data-credits="3" />
-        <div><div class="course-code">CE 48300</div><div class="course-name">Geotechnical Engineering II</div></div>
-        <div class="course-credits-badge">3 credits</div>
-      </label>
-
-      <label class="course-row" data-credits="3" data-course-code="CE 57000">
-        <input class="course-check" type="checkbox" data-credits="3" />
-        <div><div class="course-code">CE 57000</div><div class="course-name">Advanced Structural Mechanics</div></div>
-        <div class="course-credits-badge">3 credits</div>
-      </label>
-
-      <label class="course-row" data-credits="3" data-course-code="CE 57100">
-        <input class="course-check" type="checkbox" data-credits="3" />
-        <div><div class="course-code">CE 57100</div><div class="course-name">Earthquake Engineering</div></div>
-        <div class="course-credits-badge">3 credits</div>
-      </label>
-
-      <label class="course-row" data-credits="3" data-course-code="CE 57300">
-        <input class="course-check" type="checkbox" data-credits="3" />
-        <div><div class="course-code">CE 57300</div><div class="course-name">Structural Dynamics</div></div>
-        <div class="course-credits-badge">3 credits</div>
-      </label>
-
-      <label class="course-row" data-credits="3" data-course-code="CE 57600">
-        <input class="course-check" type="checkbox" data-credits="3" />
-        <div><div class="course-code">CE 57600</div><div class="course-name">Advanced Reinforced Concrete Design</div></div>
-        <div class="course-credits-badge">3 credits</div>
-      </label>
-
-      <label class="course-row" data-credits="3" data-course-code="CE 59500">
-        <input class="course-check" type="checkbox" data-credits="3" />
-        <div><div class="course-code">CE 59500</div><div class="course-name">Finite Elements In Elasticity</div></div>
-        <div class="course-credits-badge">3 credits</div>
-      </label>
-
-      <label class="course-row" data-credits="3" data-course-code="ME 53900">
-        <input class="course-check" type="checkbox" data-credits="3" />
-        <div><div class="course-code">ME 53900</div><div class="course-name">Introduction To Scientific Machine Learning</div></div>
-        <div class="course-credits-badge">3 credits</div>
-      </label>
-
-      <label class="course-row" data-credits="3" data-course-code="ME 56200">
-        <input class="course-check" type="checkbox" data-credits="3" />
-        <div><div class="course-code">ME 56200</div><div class="course-name">Advanced Dynamics</div></div>
-        <div class="course-credits-badge">3 credits</div>
-      </label>
-
-      <label class="course-row" data-credits="3" data-course-code="ME 56300">
-        <input class="course-check" type="checkbox" data-credits="3" />
-        <div><div class="course-code">ME 56300</div><div class="course-name">Mechanical Vibrations</div></div>
-        <div class="course-credits-badge">3 credits</div>
-      </label>
-
-      <label class="course-row" data-credits="3" data-course-code="ME 57100">
-        <input class="course-check" type="checkbox" data-credits="3" />
-        <div><div class="course-code">ME 57100</div><div class="course-name">Reliability Based Design</div></div>
-        <div class="course-credits-badge">3 credits</div>
-      </label>
-
-      <div class="subcategory-header"><span class="subcategory-label">Habitat Life Support / Thermal</span></div>
-
-      <label class="course-row" data-credits="3" data-course-code="AAE 57100">
-        <input class="course-check" type="checkbox" data-credits="3" />
-        <div><div class="course-code">AAE 57100</div><div class="course-name">Complex System Safety</div></div>
-        <div class="course-credits-badge">3 credits</div>
-      </label>
-
-      <label class="course-row" data-credits="3" data-course-code="CE 41300">
-        <input class="course-check" type="checkbox" data-credits="3" />
-        <div><div class="course-code">CE 41300</div><div class="course-name">Building Envelope Design And Thermal Loads</div></div>
-        <div class="course-credits-badge">3 credits</div>
-      </label>
-
-      <label class="course-row" data-credits="3" data-course-code="CE 51401">
-        <input class="course-check" type="checkbox" data-credits="3" />
-        <div><div class="course-code">CE 51401</div><div class="course-name">Building Controls</div></div>
-        <div class="course-credits-badge">3 credits</div>
-      </label>
-
-      <label class="course-row" data-credits="3" data-course-code="ME 41500">
-        <input class="course-check" type="checkbox" data-credits="3" />
-        <div><div class="course-code">ME 41500</div><div class="course-name">Energy Systems Engineering</div></div>
-        <div class="course-credits-badge">3 credits</div>
-      </label>
-
-      <label class="course-row" data-credits="3" data-course-code="ME 41800">
-        <input class="course-check" type="checkbox" data-credits="3" />
-        <div><div class="course-code">ME 41800</div><div class="course-name">Engineering Of Environmental Systems And Equipment</div></div>
-        <div class="course-credits-badge">3 credits</div>
-      </label>
-
-      <label class="course-row" data-credits="3" data-course-code="ME 50100">
-        <input class="course-check" type="checkbox" data-credits="3" />
-        <div><div class="course-code">ME 50100</div><div class="course-name">Statistical Thermodynamics</div></div>
-        <div class="course-credits-badge">3 credits</div>
-      </label>
-
-      <label class="course-row" data-credits="3" data-course-code="ME 50500">
-        <input class="course-check" type="checkbox" data-credits="3" />
-        <div><div class="course-code">ME 50500</div><div class="course-name">Intermediate Heat Transfer</div></div>
-        <div class="course-credits-badge">3 credits</div>
-      </label>
-
-      <label class="course-row" data-credits="3" data-course-code="ME 50600">
-        <input class="course-check" type="checkbox" data-credits="3" />
-        <div><div class="course-code">ME 50600</div><div class="course-name">Two-Phase Flow And Heat Transfer</div></div>
-        <div class="course-credits-badge">3 credits</div>
-      </label>
-
-      <label class="course-row" data-credits="3" data-course-code="ME 51100">
-        <input class="course-check" type="checkbox" data-credits="3" />
-        <div><div class="course-code">ME 51100</div><div class="course-name">Heat Transfer In Electronic Systems</div></div>
-        <div class="course-credits-badge">3 credits</div>
-      </label>
-
-      <label class="course-row" data-credits="3" data-course-code="ME 53900">
-        <input class="course-check" type="checkbox" data-credits="3" />
-        <div><div class="course-code">ME 53900</div><div class="course-name">Introduction To Scientific Machine Learning</div></div>
-        <div class="course-credits-badge">3 credits</div>
-      </label>
-
-      <label class="course-row" data-credits="3" data-course-code="ME 57500">
-        <input class="course-check" type="checkbox" data-credits="3" />
-        <div><div class="course-code">ME 57500</div><div class="course-name">Theory And Design Of Control Systems</div></div>
-        <div class="course-credits-badge">3 credits</div>
-      </label>
-
-      <label class="course-row" data-credits="3" data-course-code="ME 57800">
-        <input class="course-check" type="checkbox" data-credits="3" />
-        <div><div class="course-code">ME 57800</div><div class="course-name">Digital Control</div></div>
-        <div class="course-credits-badge">3 credits</div>
-      </label>
-
-      <label class="course-row" data-credits="3" data-course-code="ME 58800">
-        <input class="course-check" type="checkbox" data-credits="3" />
-        <div><div class="course-code">ME 58800</div><div class="course-name">Mechatronics — Integrated Design Of Electro-Mechanical Systems</div></div>
-        <div class="course-credits-badge">3 credits</div>
-      </label>
-
-      <div class="subcategory-header"><span class="subcategory-label">Habitat Robotic Construction</span></div>
-
-      <label class="course-row" data-credits="3" data-course-code="AAE 55200">
-        <input class="course-check" type="checkbox" data-credits="3" />
-        <div><div class="course-code">AAE 55200</div><div class="course-name">Nondestructive Evaluation Of Structures And Materials</div></div>
-        <div class="course-credits-badge">3 credits</div>
-      </label>
-
-      <label class="course-row" data-credits="3" data-course-code="CE 48300">
-        <input class="course-check" type="checkbox" data-credits="3" />
-        <div><div class="course-code">CE 48300</div><div class="course-name">Geotechnical Engineering II</div></div>
-        <div class="course-credits-badge">3 credits</div>
-      </label>
-
-      <label class="course-row" data-credits="3" data-course-code="EAPS 55700">
-        <input class="course-check" type="checkbox" data-credits="3" />
-        <div><div class="course-code">EAPS 55700</div><div class="course-name">Introduction To Seismology</div></div>
-        <div class="course-credits-badge">3 credits</div>
-      </label>
-
-      <label class="course-row" data-credits="3" data-course-code="ME 36500">
-        <input class="course-check" type="checkbox" data-credits="3" />
-        <div><div class="course-code">ME 36500</div><div class="course-name">Measurement And Control Systems I</div></div>
-        <div class="course-credits-badge">3 credits</div>
-      </label>
-
-      <label class="course-row" data-credits="3" data-course-code="ME 37500">
-        <input class="course-check" type="checkbox" data-credits="3" />
-        <div><div class="course-code">ME 37500</div><div class="course-name">Measurement And Control Systems II</div></div>
-        <div class="course-credits-badge">3 credits</div>
-      </label>
-
-      <label class="course-row" data-credits="3" data-course-code="ME 57200">
-        <input class="course-check" type="checkbox" data-credits="3" />
-        <div><div class="course-code">ME 57200</div><div class="course-name">Analysis And Design Of Robotic Manipulators</div></div>
-        <div class="course-credits-badge">3 credits</div>
-      </label>
-
-      <label class="course-row" data-credits="3" data-course-code="ME 57500">
-        <input class="course-check" type="checkbox" data-credits="3" />
-        <div><div class="course-code">ME 57500</div><div class="course-name">Theory And Design Of Control Systems</div></div>
-        <div class="course-credits-badge">3 credits</div>
-      </label>
-
-      <label class="course-row" data-credits="3" data-course-code="ME 57800">
-        <input class="course-check" type="checkbox" data-credits="3" />
-        <div><div class="course-code">ME 57800</div><div class="course-name">Digital Control</div></div>
-        <div class="course-credits-badge">3 credits</div>
-      </label>
-
-      <label class="course-row" data-credits="3" data-course-code="ME 58800">
-        <input class="course-check" type="checkbox" data-credits="3" />
-        <div><div class="course-code">ME 58800</div><div class="course-name">Mechatronics — Integrated Design Of Electro-Mechanical Systems</div></div>
-        <div class="course-credits-badge">3 credits</div>
-      </label>
-
-      <label class="course-row" data-credits="3" data-course-code="ECE 32100">
-        <input class="course-check" type="checkbox" data-credits="3" />
-        <div><div class="course-code">ECE 32100</div><div class="course-name">Electromechanical Motion Devices</div></div>
-        <div class="course-credits-badge">3 credits</div>
-      </label>
-
+    <div class="step-label">Step 1 — Choose your primary track</div>
+    <div class="track-options" id="primary-track-options"></div>
+    <div class="subtrack-selector" id="primary-subtrack-selector" style="display:none">
+      <div class="step-label">Step 2 — Choose a sub-track</div>
+      <div class="track-options" id="primary-subtrack-options"></div>
+    </div>
+    <div id="primary-course-area">
+      <div class="course-locked-placeholder" id="primary-placeholder">
+        <i class="bi bi-ui-checks"></i>
+        <span>Select a track above to view available courses</span>
+      </div>
+      <div id="primary-course-list" data-category="primary"></div>
     </div>
   </div>
 
-  <!-- ─── SECTION 3: SECONDARY ─────────────────────────────── -->
+  <!-- ─── SECTION 3: SECONDARY TRACK ──────────────────────── -->
   <div class="course-section" id="section-secondary">
     <div class="section-header">
       <span class="section-index">03 —</span>
-      <h2 class="section-title">Secondary Space Industry</h2>
+      <h2 class="section-title">Secondary Track Selection</h2>
     </div>
     <hr class="section-rule" />
     <p class="section-meta">
-      Select courses totaling at least <span class="target">3 credit hours</span> from one or more topic areas below.
-      Courses cannot be counted for both Primary and Secondary areas.
+      Choose a different secondary track and select a minimum of <span class="target">3 credit hours</span>.
+      Courses selected in your primary track cannot also be counted here.
     </p>
-
-    <div class="course-list" data-category="secondary">
-
-      <div class="subcategory-header"><span class="subcategory-label">Communications and Cybersecurity in Space</span></div>
-
-      <label class="course-row" data-credits="3" data-course-code="AAE 44000">
-        <input class="course-check" type="checkbox" data-credits="3" />
-        <div><div class="course-code">AAE 44000</div><div class="course-name">Spacecraft Attitude Dynamics</div></div>
-        <div class="course-credits-badge">3 credits</div>
-      </label>
-
-      <label class="course-row" data-credits="3" data-course-code="AAE 57100">
-        <input class="course-check" type="checkbox" data-credits="3" />
-        <div><div class="course-code">AAE 57100</div><div class="course-name">Complex System Safety</div></div>
-        <div class="course-credits-badge">3 credits</div>
-      </label>
-
-      <label class="course-row" data-credits="3" data-course-code="AAE 57500">
-        <input class="course-check" type="checkbox" data-credits="3" />
-        <div><div class="course-code">AAE 57500</div><div class="course-name">Introduction To Satellite Navigation And Positioning</div></div>
-        <div class="course-credits-badge">3 credits</div>
-      </label>
-
-      <label class="course-row" data-credits="3" data-course-code="CNIT 32000">
-        <input class="course-check" type="checkbox" data-credits="3" />
-        <div><div class="course-code">CNIT 32000</div><div class="course-name">Policy, Regulation, And Globalization In Information Technology</div></div>
-        <div class="course-credits-badge">3 credits</div>
-      </label>
-
-      <label class="course-row" data-credits="3" data-course-code="CNIT 41500">
-        <input class="course-check" type="checkbox" data-credits="3" />
-        <div><div class="course-code">CNIT 41500</div><div class="course-name">Advanced Coding Security</div></div>
-        <div class="course-credits-badge">3 credits</div>
-      </label>
-
-      <label class="course-row" data-credits="3" data-course-code="CNIT 41700">
-        <input class="course-check" type="checkbox" data-credits="3" />
-        <div><div class="course-code">CNIT 41700</div><div class="course-name">Critical Infrastructure Security</div></div>
-        <div class="course-credits-badge">3 credits</div>
-      </label>
-
-      <label class="course-row" data-credits="3" data-course-code="CNIT 45500">
-        <input class="course-check" type="checkbox" data-credits="3" />
-        <div><div class="course-code">CNIT 45500</div><div class="course-name">Network Security</div></div>
-        <div class="course-credits-badge">3 credits</div>
-      </label>
-
-      <label class="course-row" data-credits="3" data-course-code="ECE 40400">
-        <input class="course-check" type="checkbox" data-credits="3" />
-        <div><div class="course-code">ECE 40400</div><div class="course-name">Introduction To Computer Security</div></div>
-        <div class="course-credits-badge">3 credits</div>
-      </label>
-
-      <label class="course-row" data-credits="4" data-course-code="ECE 43800">
-        <input class="course-check" type="checkbox" data-credits="4" />
-        <div><div class="course-code">ECE 43800</div><div class="course-name">Digital Signal Processing With Applications</div></div>
-        <div class="course-credits-badge">4 credits</div>
-      </label>
-
-      <label class="course-row" data-credits="4" data-course-code="ECE 44000">
-        <input class="course-check" type="checkbox" data-credits="4" />
-        <div><div class="course-code">ECE 44000</div><div class="course-name">Transmission Of Information</div></div>
-        <div class="course-credits-badge">4 credits</div>
-      </label>
-
-      <label class="course-row" data-credits="3" data-course-code="ECE 54400">
-        <input class="course-check" type="checkbox" data-credits="3" />
-        <div><div class="course-code">ECE 54400</div><div class="course-name">Digital Communications</div></div>
-        <div class="course-credits-badge">3 credits</div>
-      </label>
-
-      <div class="subcategory-header"><span class="subcategory-label">Science Missions and Space as a Laboratory</span></div>
-
-      <label class="course-row" data-credits="3" data-course-code="AAE 41800">
-        <input class="course-check" type="checkbox" data-credits="3" />
-        <div><div class="course-code">AAE 41800</div><div class="course-name">Zero-Gravity Flight Experiment</div></div>
-        <div class="course-credits-badge">3 credits</div>
-      </label>
-
-      <label class="course-row" data-credits="3" data-course-code="AAE 51800">
-        <input class="course-check" type="checkbox" data-credits="3" />
-        <div><div class="course-code">AAE 51800</div><div class="course-name">Low-Gravity Fluid Dynamics</div></div>
-        <div class="course-credits-badge">3 credits</div>
-      </label>
-
-      <label class="course-row" data-credits="3" data-course-code="AAE 52300">
-        <input class="course-check" type="checkbox" data-credits="3" />
-        <div><div class="course-code">AAE 52300</div><div class="course-name">Introduction To Remote Sensing</div></div>
-        <div class="course-credits-badge">3 credits</div>
-      </label>
-
-      <label class="course-row" data-credits="3" data-course-code="AAE 57100">
-        <input class="course-check" type="checkbox" data-credits="3" />
-        <div><div class="course-code">AAE 57100</div><div class="course-name">Complex System Safety</div></div>
-        <div class="course-credits-badge">3 credits</div>
-      </label>
-
-      <label class="course-row" data-credits="3" data-course-code="EAPS 35300">
-        <input class="course-check" type="checkbox" data-credits="3" />
-        <div><div class="course-code">EAPS 35300</div><div class="course-name">Earth And Planetary Surface Processes</div></div>
-        <div class="course-credits-badge">3 credits</div>
-      </label>
-
-      <label class="course-row" data-credits="3" data-course-code="EAPS 35400">
-        <input class="course-check" type="checkbox" data-credits="3" />
-        <div><div class="course-code">EAPS 35400</div><div class="course-name">Earth And Planetary Geophysics</div></div>
-        <div class="course-credits-badge">3 credits</div>
-      </label>
-
-      <label class="course-row" data-credits="3" data-course-code="EAPS 36700">
-        <input class="course-check" type="checkbox" data-credits="3" />
-        <div><div class="course-code">EAPS 36700</div><div class="course-name">Survey Of Planetary Atmospheres</div></div>
-        <div class="course-credits-badge">3 credits</div>
-      </label>
-
-      <label class="course-row" data-credits="3" data-course-code="EAPS 38500">
-        <input class="course-check" type="checkbox" data-credits="3" />
-        <div><div class="course-code">EAPS 38500</div><div class="course-name">Principles Of Engineering Geology</div></div>
-        <div class="course-credits-badge">3 credits</div>
-      </label>
-
-      <label class="course-row" data-credits="3" data-course-code="EAPS 44500">
-        <input class="course-check" type="checkbox" data-credits="3" />
-        <div><div class="course-code">EAPS 44500</div><div class="course-name">Spacecraft Design</div></div>
-        <div class="course-credits-badge">3 credits</div>
-      </label>
-
-      <label class="course-row" data-credits="3" data-course-code="EAPS 55600">
-        <input class="course-check" type="checkbox" data-credits="3" />
-        <div><div class="course-code">EAPS 55600</div><div class="course-name">Planetary Surface Processes</div></div>
-        <div class="course-credits-badge">3 credits</div>
-      </label>
-
-      <label class="course-row" data-credits="3" data-course-code="EAPS 55700">
-        <input class="course-check" type="checkbox" data-credits="3" />
-        <div><div class="course-code">EAPS 55700</div><div class="course-name">Introduction To Seismology</div></div>
-        <div class="course-credits-badge">3 credits</div>
-      </label>
-
-      <label class="course-row" data-credits="3" data-course-code="EAPS 56700">
-        <input class="course-check" type="checkbox" data-credits="3" />
-        <div><div class="course-code">EAPS 56700</div><div class="course-name">Planetary Atmospheres</div></div>
-        <div class="course-credits-badge">3 credits</div>
-      </label>
-
-      <label class="course-row" data-credits="3" data-course-code="EAPS 58801">
-        <input class="course-check" type="checkbox" data-credits="3" />
-        <div><div class="course-code">EAPS 58801</div><div class="course-name">Impact Cratering</div></div>
-        <div class="course-credits-badge">3 credits</div>
-      </label>
-
-      <label class="course-row" data-credits="3" data-course-code="ECE 57700">
-        <input class="course-check" type="checkbox" data-credits="3" />
-        <div><div class="course-code">ECE 57700</div><div class="course-name">Engineering Aspects Of Remote Sensing</div></div>
-        <div class="course-credits-badge">3 credits</div>
-      </label>
-
-      <label class="course-row" data-credits="3" data-course-code="ME 50600">
-        <input class="course-check" type="checkbox" data-credits="3" />
-        <div><div class="course-code">ME 50600</div><div class="course-name">Two-Phase Flow And Heat Transfer</div></div>
-        <div class="course-credits-badge">3 credits</div>
-      </label>
-
-      <label class="course-row" data-credits="3" data-course-code="ME 57100">
-        <input class="course-check" type="checkbox" data-credits="3" />
-        <div><div class="course-code">ME 57100</div><div class="course-name">Reliability Based Design</div></div>
-        <div class="course-credits-badge">3 credits</div>
-      </label>
-
-      <div class="subcategory-header"><span class="subcategory-label">Space Commerce and Policy</span></div>
-
-      <label class="course-row" data-credits="3" data-course-code="AAE 57100">
-        <input class="course-check" type="checkbox" data-credits="3" />
-        <div><div class="course-code">AAE 57100</div><div class="course-name">Complex System Safety</div></div>
-        <div class="course-credits-badge">3 credits</div>
-      </label>
-
-      <label class="course-row" data-credits="3" data-course-code="CNIT 32000">
-        <input class="course-check" type="checkbox" data-credits="3" />
-        <div><div class="course-code">CNIT 32000</div><div class="course-name">Policy, Regulation, And Globalization In Information Technology</div></div>
-        <div class="course-credits-badge">3 credits</div>
-      </label>
-
-      <label class="course-row" data-credits="3" data-course-code="CNIT 37100">
-        <input class="course-check" type="checkbox" data-credits="3" />
-        <div><div class="course-code">CNIT 37100</div><div class="course-name">Cyberlaw And Ethics</div></div>
-        <div class="course-credits-badge">3 credits</div>
-      </label>
-
-      <label class="course-row" data-credits="3" data-course-code="ECON 25100">
-        <input class="course-check" type="checkbox" data-credits="3" />
-        <div><div class="course-code">ECON 25100</div><div class="course-name">Microeconomics</div></div>
-        <div class="course-credits-badge">3 credits</div>
-      </label>
-
-      <label class="course-row" data-credits="3" data-course-code="ECON 25200">
-        <input class="course-check" type="checkbox" data-credits="3" />
-        <div><div class="course-code">ECON 25200</div><div class="course-name">Macroeconomics</div></div>
-        <div class="course-credits-badge">3 credits</div>
-      </label>
-
-      <label class="course-row" data-credits="3" data-course-code="IE 54600">
-        <input class="course-check" type="checkbox" data-credits="3" />
-        <div><div class="course-code">IE 54600</div><div class="course-name">Economic Decisions In Engineering</div></div>
-        <div class="course-credits-badge">3 credits</div>
-      </label>
-
-      <div class="subcategory-header"><span class="subcategory-label">Space Transportation</span></div>
-
-      <label class="course-row" data-credits="3" data-course-code="AAE 33800">
-        <input class="course-check" type="checkbox" data-credits="3" />
-        <div><div class="course-code">AAE 33800</div><div class="course-name">Thermal Sciences</div></div>
-        <div class="course-credits-badge">3 credits</div>
-      </label>
-
-      <label class="course-row" data-credits="3" data-course-code="AAE 33900">
-        <input class="course-check" type="checkbox" data-credits="3" />
-        <div><div class="course-code">AAE 33900</div><div class="course-name">Aerospace Propulsion</div></div>
-        <div class="course-credits-badge">3 credits</div>
-      </label>
-
-      <label class="course-row" data-credits="3" data-course-code="AAE 35103">
-        <input class="course-check" type="checkbox" data-credits="3" />
-        <div><div class="course-code">AAE 35103</div><div class="course-name">Aerospace Systems Design</div></div>
-        <div class="course-credits-badge">3 credits</div>
-      </label>
-
-      <label class="course-row" data-credits="3" data-course-code="AAE 44000">
-        <input class="course-check" type="checkbox" data-credits="3" />
-        <div><div class="course-code">AAE 44000</div><div class="course-name">Spacecraft Attitude Dynamics</div></div>
-        <div class="course-credits-badge">3 credits</div>
-      </label>
-
-      <label class="course-row" data-credits="3" data-course-code="AAE 45000">
-        <input class="course-check" type="checkbox" data-credits="3" />
-        <div><div class="course-code">AAE 45000</div><div class="course-name">Spacecraft Design</div></div>
-        <div class="course-credits-badge">3 credits</div>
-      </label>
-
-      <label class="course-row" data-credits="3" data-course-code="AAE 51800">
-        <input class="course-check" type="checkbox" data-credits="3" />
-        <div><div class="course-code">AAE 51800</div><div class="course-name">Low-Gravity Fluid Dynamics</div></div>
-        <div class="course-credits-badge">3 credits</div>
-      </label>
-
-      <label class="course-row" data-credits="3" data-course-code="AAE 53200">
-        <input class="course-check" type="checkbox" data-credits="3" />
-        <div><div class="course-code">AAE 53200</div><div class="course-name">Orbit Mechanics</div></div>
-        <div class="course-credits-badge">3 credits</div>
-      </label>
-
-      <label class="course-row" data-credits="3" data-course-code="AAE 53300">
-        <input class="course-check" type="checkbox" data-credits="3" />
-        <div><div class="course-code">AAE 53300</div><div class="course-name">Space Traffic Engineering Management</div></div>
-        <div class="course-credits-badge">3 credits</div>
-      </label>
-
-      <label class="course-row" data-credits="3" data-course-code="AAE 53400">
-        <input class="course-check" type="checkbox" data-credits="3" />
-        <div><div class="course-code">AAE 53400</div><div class="course-name">Spacecraft Electric Propulsion</div></div>
-        <div class="course-credits-badge">3 credits</div>
-      </label>
-
-      <label class="course-row" data-credits="3" data-course-code="AAE 53500">
-        <input class="course-check" type="checkbox" data-credits="3" />
-        <div><div class="course-code">AAE 53500</div><div class="course-name">Propulsion Design, Build, Test</div></div>
-        <div class="course-credits-badge">3 credits</div>
-      </label>
-
-      <label class="course-row" data-credits="3" data-course-code="AAE 53900">
-        <input class="course-check" type="checkbox" data-credits="3" />
-        <div><div class="course-code">AAE 53900</div><div class="course-name">Advanced Rocket Propulsion</div></div>
-        <div class="course-credits-badge">3 credits</div>
-      </label>
-
-      <label class="course-row" data-credits="3" data-course-code="AAE 56400">
-        <input class="course-check" type="checkbox" data-credits="3" />
-        <div><div class="course-code">AAE 56400</div><div class="course-name">Systems Analysis And Synthesis</div></div>
-        <div class="course-credits-badge">3 credits</div>
-      </label>
-
-      <label class="course-row" data-credits="3" data-course-code="AAE 57100">
-        <input class="course-check" type="checkbox" data-credits="3" />
-        <div><div class="course-code">AAE 57100</div><div class="course-name">Complex System Safety</div></div>
-        <div class="course-credits-badge">3 credits</div>
-      </label>
-
-      <label class="course-row" data-credits="3" data-course-code="AAE 57500">
-        <input class="course-check" type="checkbox" data-credits="3" />
-        <div><div class="course-code">AAE 57500</div><div class="course-name">Introduction To Satellite Navigation And Positioning</div></div>
-        <div class="course-credits-badge">3 credits</div>
-      </label>
-
-      <label class="course-row" data-credits="4" data-course-code="ME 31500">
-        <input class="course-check" type="checkbox" data-credits="4" />
-        <div><div class="course-code">ME 31500</div><div class="course-name">Heat And Mass Transfer</div></div>
-        <div class="course-credits-badge">4 credits</div>
-      </label>
-
-      <label class="course-row" data-credits="3" data-course-code="ME 46300">
-        <input class="course-check" type="checkbox" data-credits="3" />
-        <div><div class="course-code">ME 46300</div><div class="course-name">Engineering Design</div></div>
-        <div class="course-credits-badge">3 credits</div>
-      </label>
-
-      <label class="course-row" data-credits="3" data-course-code="ME 50500">
-        <input class="course-check" type="checkbox" data-credits="3" />
-        <div><div class="course-code">ME 50500</div><div class="course-name">Intermediate Heat Transfer</div></div>
-        <div class="course-credits-badge">3 credits</div>
-      </label>
-
-      <label class="course-row" data-credits="3" data-course-code="ME 50600">
-        <input class="course-check" type="checkbox" data-credits="3" />
-        <div><div class="course-code">ME 50600</div><div class="course-name">Two-Phase Flow And Heat Transfer</div></div>
-        <div class="course-credits-badge">3 credits</div>
-      </label>
-
-      <label class="course-row" data-credits="3" data-course-code="ME 56200">
-        <input class="course-check" type="checkbox" data-credits="3" />
-        <div><div class="course-code">ME 56200</div><div class="course-name">Advanced Dynamics</div></div>
-        <div class="course-credits-badge">3 credits</div>
-      </label>
-
-      <label class="course-row" data-credits="3" data-course-code="ME 57100">
-        <input class="course-check" type="checkbox" data-credits="3" />
-        <div><div class="course-code">ME 57100</div><div class="course-name">Reliability Based Design</div></div>
-        <div class="course-credits-badge">3 credits</div>
-      </label>
-
-      <label class="course-row" data-credits="3" data-course-code="NUCL 35100">
-        <input class="course-check" type="checkbox" data-credits="3" />
-        <div><div class="course-code">NUCL 35100</div><div class="course-name">Nuclear Thermal-Hydraulics II</div></div>
-        <div class="course-credits-badge">3 credits</div>
-      </label>
-
-      <label class="course-row" data-credits="3" data-course-code="NUCL 35500">
-        <input class="course-check" type="checkbox" data-credits="3" />
-        <div><div class="course-code">NUCL 35500</div><div class="course-name">Nuclear Thermohydraulics Laboratory</div></div>
-        <div class="course-credits-badge">3 credits</div>
-      </label>
-
-      <label class="course-row" data-credits="3" data-course-code="NUCL 55100">
-        <input class="course-check" type="checkbox" data-credits="3" />
-        <div><div class="course-code">NUCL 55100</div><div class="course-name">Mass, Momentum, And Energy Transfer In Energy Systems</div></div>
-        <div class="course-credits-badge">3 credits</div>
-      </label>
-
-      <div class="subcategory-header"><span class="subcategory-label">In-Space Manufacturing, Assembly, Debris Management</span></div>
-
-      <label class="course-row" data-credits="3" data-course-code="AAE 41800">
-        <input class="course-check" type="checkbox" data-credits="3" />
-        <div><div class="course-code">AAE 41800</div><div class="course-name">Zero-Gravity Flight Experiment</div></div>
-        <div class="course-credits-badge">3 credits</div>
-      </label>
-
-      <label class="course-row" data-credits="3" data-course-code="AAE 44000">
-        <input class="course-check" type="checkbox" data-credits="3" />
-        <div><div class="course-code">AAE 44000</div><div class="course-name">Spacecraft Attitude Dynamics</div></div>
-        <div class="course-credits-badge">3 credits</div>
-      </label>
-
-      <label class="course-row" data-credits="3" data-course-code="AAE 53200">
-        <input class="course-check" type="checkbox" data-credits="3" />
-        <div><div class="course-code">AAE 53200</div><div class="course-name">Orbit Mechanics</div></div>
-        <div class="course-credits-badge">3 credits</div>
-      </label>
-
-      <label class="course-row" data-credits="3" data-course-code="AAE 53300">
-        <input class="course-check" type="checkbox" data-credits="3" />
-        <div><div class="course-code">AAE 53300</div><div class="course-name">Space Traffic Engineering Management</div></div>
-        <div class="course-credits-badge">3 credits</div>
-      </label>
-
-      <label class="course-row" data-credits="3" data-course-code="IE 47000">
-        <input class="course-check" type="checkbox" data-credits="3" />
-        <div><div class="course-code">IE 47000</div><div class="course-name">Manufacturing Processes II</div></div>
-        <div class="course-credits-badge">3 credits</div>
-      </label>
-
-      <label class="course-row" data-credits="3" data-course-code="IE 47200">
-        <input class="course-check" type="checkbox" data-credits="3" />
-        <div><div class="course-code">IE 47200</div><div class="course-name">Imagine, Model, Make</div></div>
-        <div class="course-credits-badge">3 credits</div>
-      </label>
-
-      <label class="course-row" data-credits="3" data-course-code="IE 48400">
-        <input class="course-check" type="checkbox" data-credits="3" />
-        <div><div class="course-code">IE 48400</div><div class="course-name">Integrated Production Systems II</div></div>
-        <div class="course-credits-badge">3 credits</div>
-      </label>
-
-      <label class="course-row" data-credits="3" data-course-code="IE 56600">
-        <input class="course-check" type="checkbox" data-credits="3" />
-        <div><div class="course-code">IE 56600</div><div class="course-name">Production Management Control</div></div>
-        <div class="course-credits-badge">3 credits</div>
-      </label>
-
-      <label class="course-row" data-credits="3" data-course-code="IE 57400">
-        <input class="course-check" type="checkbox" data-credits="3" />
-        <div><div class="course-code">IE 57400</div><div class="course-name">Industrial Robotics And Flexible Assembly</div></div>
-        <div class="course-credits-badge">3 credits</div>
-      </label>
-
-      <label class="course-row" data-credits="3" data-course-code="IE 58300">
-        <input class="course-check" type="checkbox" data-credits="3" />
-        <div><div class="course-code">IE 58300</div><div class="course-name">Design And Evaluation Of Material Handling Systems</div></div>
-        <div class="course-credits-badge">3 credits</div>
-      </label>
-
+    <div class="section-lock-msg" id="secondary-lock-msg">
+      <i class="bi bi-lock-fill"></i>
+      <span>Select your Primary Track first to unlock Secondary Track options</span>
+    </div>
+    <div id="secondary-selector-area" style="display:none">
+      <div class="step-label">Step 1 — Choose your secondary track</div>
+      <div class="track-options" id="secondary-track-options"></div>
+      <div class="subtrack-selector" id="secondary-subtrack-selector" style="display:none">
+        <div class="step-label">Step 2 — Choose a sub-track</div>
+        <div class="track-options" id="secondary-subtrack-options"></div>
+      </div>
+      <div id="secondary-course-area">
+        <div class="course-locked-placeholder" id="secondary-placeholder">
+          <i class="bi bi-ui-checks"></i>
+          <span>Select a track above to view available courses</span>
+        </div>
+        <div id="secondary-course-list" data-category="secondary"></div>
+      </div>
     </div>
   </div>
 
@@ -1484,21 +1132,15 @@
       <h2 class="section-title">Required Practical Aerospace Experience</h2>
     </div>
     <hr class="section-rule" />
-    <p class="section-meta">
-      Declare your practical experience status below (<span class="target">0–3 credit hours</span>)
-    </p>
-
+    <p class="section-meta">Declare your practical experience status (<span class="target">0–3 credit hours</span>)</p>
     <div class="practical-note">
       Qualifying experiences include: <span class="highlight">campus-based research</span> in an aerospace topic,
       a <span class="highlight">design-build-test project course</span>, relevant work through a
       <span class="highlight">Purdue student organization</span> (e.g., Purdue Space Program) or sponsored competition
-      (e.g., NASA Lunabotics), or an <span class="highlight">off-campus internship or co-op rotation</span> in an
-      aerospace topic. If your practical experience provides 0 credit, you must select an additional 3-credit course
-      from any Space Industry area.
+      (e.g., NASA Lunabotics), or an <span class="highlight">off-campus internship or co-op rotation</span> in an aerospace topic.
+      If your practical experience provides 0 credit, you must select an additional 3-credit course from any Space Industry area.
     </div>
-
-    <div class="course-list" data-category="practical">
-
+    <div id="practical-course-list">
       <label class="course-row" data-credits="3" data-course-code="PRACTICAL">
         <input class="course-radio" type="radio" name="practical-choice" data-credits="3" data-na="false" />
         <div>
@@ -1507,7 +1149,6 @@
         </div>
         <div class="course-credits-badge">3 credits</div>
       </label>
-
       <label class="course-row na-option" data-credits="0" data-course-code="PRACTICAL-NA">
         <input class="course-radio" type="radio" name="practical-choice" data-credits="0" data-na="true" />
         <div>
@@ -1516,19 +1157,17 @@
         </div>
         <div class="course-credits-badge">0 credits</div>
       </label>
-
     </div>
-
     <div class="na-warning" id="na-warning">
       <i class="bi bi-info-circle me-1"></i>
-      Select an additional 3 credit hours from the Primary or Secondary Space Industry sections above to meet the 16-credit minimum.
+      Select an additional 3 credit hours from the Primary or Secondary Track sections above to meet the 16-credit minimum.
     </div>
   </div>
 
   <!-- Action Row -->
   <div class="action-row">
     <button class="btn-generate" id="btn-generate" disabled>
-      <i class="bi bi-send-fill me-2"></i>Submit Plan of Study
+      <i class="bi bi-file-earmark-arrow-down-fill"></i>Get PDF Printout
     </button>
     <button class="btn-reset" id="btn-reset">
       <i class="bi bi-arrow-counterclockwise me-1"></i>Reset All
@@ -1538,120 +1177,483 @@
 </div><!-- /page-wrapper -->
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-
 <script>
 /* ══════════════════════════════════════════════════════════════
    STAR FIELD
 ══════════════════════════════════════════════════════════════ */
 (function () {
   const canvas = document.getElementById('star-canvas');
-  const ctx    = canvas.getContext('2d');
-  let stars    = [];
-
-  function resize () {
-    canvas.width  = window.innerWidth;
+  const ctx = canvas.getContext('2d');
+  let stars = [];
+  function resize() {
+    canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
-    buildStars();
-  }
-
-  function buildStars () {
     stars = [];
     const count = Math.floor((canvas.width * canvas.height) / 4800);
     for (let i = 0; i < count; i++) {
-      stars.push({
-        x: Math.random() * canvas.width,
-        y: Math.random() * canvas.height,
-        r: Math.random() * 1.1 + 0.2,
-        a: Math.random(),
-        da: (Math.random() - 0.5) * 0.004
-      });
+      stars.push({ x: Math.random()*canvas.width, y: Math.random()*canvas.height,
+        r: Math.random()*1.1+0.2, a: Math.random(), da: (Math.random()-0.5)*0.004 });
     }
   }
-
-  function draw () {
+  function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     for (const s of stars) {
       s.a += s.da;
       if (s.a <= 0 || s.a >= 1) s.da *= -1;
       ctx.beginPath();
-      ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
-      ctx.fillStyle = `rgba(207,185,145,${s.a * 0.5})`;
+      ctx.arc(s.x, s.y, s.r, 0, Math.PI*2);
+      /* Use Rush Gold for star color — warmer, more Purdue-aligned */
+      ctx.fillStyle = `rgba(218,170,0,${s.a * 0.35})`;
       ctx.fill();
     }
     requestAnimationFrame(draw);
   }
-
   window.addEventListener('resize', resize);
-  resize();
-  draw();
+  resize(); draw();
 })();
 
 /* ══════════════════════════════════════════════════════════════
-   CREDIT TRACKER LOGIC
+   TRACK DATA
 ══════════════════════════════════════════════════════════════ */
+const TRACKS = [
+  {
+    id: 'communications',
+    label: 'Communications and Cybersecurity in Space',
+    short: 'Comm. & Cybersecurity',
+    subTracks: null,
+    courses: [
+      { code: 'AAE 44000', name: 'Spacecraft Attitude Dynamics', credits: 3 },
+      { code: 'AAE 57100', name: 'Complex System Safety', credits: 3 },
+      { code: 'AAE 57500', name: 'Introduction To Satellite Navigation And Positioning', credits: 3 },
+      { code: 'CNIT 32000', name: 'Policy, Regulation, And Globalization In Information Technology', credits: 3 },
+      { code: 'CNIT 41500', name: 'Advanced Coding Security', credits: 3 },
+      { code: 'CNIT 41700', name: 'Critical Infrastructure Security', credits: 3 },
+      { code: 'CNIT 45500', name: 'Network Security', credits: 3 },
+      { code: 'ECE 40400', name: 'Introduction To Computer Security', credits: 3 },
+      { code: 'ECE 43800', name: 'Digital Signal Processing With Applications', credits: 4 },
+      { code: 'ECE 44000', name: 'Transmission Of Information', credits: 4 },
+      { code: 'ECE 54400', name: 'Digital Communications', credits: 3 },
+    ]
+  },
+  {
+    id: 'science',
+    label: 'Science Missions and Space as a Laboratory',
+    short: 'Science Missions',
+    subTracks: null,
+    courses: [
+      { code: 'AAE 41800', name: 'Zero-Gravity Flight Experiment', credits: 3 },
+      { code: 'AAE 51800', name: 'Low-Gravity Fluid Dynamics', credits: 3 },
+      { code: 'AAE 52300', name: 'Introduction To Remote Sensing', credits: 3 },
+      { code: 'AAE 57100', name: 'Complex System Safety', credits: 3 },
+      { code: 'EAPS 35300', name: 'Earth And Planetary Surface Processes', credits: 3 },
+      { code: 'EAPS 35400', name: 'Earth And Planetary Geophysics', credits: 3 },
+      { code: 'EAPS 36700', name: 'Survey Of Planetary Atmospheres', credits: 3 },
+      { code: 'EAPS 38500', name: 'Principles Of Engineering Geology', credits: 3 },
+      { code: 'EAPS 44500', name: 'Spacecraft Design', credits: 3 },
+      { code: 'EAPS 55600', name: 'Planetary Surface Processes', credits: 3 },
+      { code: 'EAPS 55700', name: 'Introduction To Seismology', credits: 3 },
+      { code: 'EAPS 56700', name: 'Planetary Atmospheres', credits: 3 },
+      { code: 'EAPS 58801', name: 'Impact Cratering', credits: 3 },
+      { code: 'ECE 57700', name: 'Engineering Aspects Of Remote Sensing', credits: 3 },
+      { code: 'ME 50600', name: 'Two-Phase Flow And Heat Transfer', credits: 3 },
+      { code: 'ME 57100', name: 'Reliability Based Design', credits: 3 },
+    ]
+  },
+  {
+    id: 'commerce',
+    label: 'Space Commerce and Policy',
+    short: 'Commerce & Policy',
+    subTracks: null,
+    courses: [
+      { code: 'AAE 57100', name: 'Complex System Safety', credits: 3 },
+      { code: 'CNIT 32000', name: 'Policy, Regulation, And Globalization In Information Technology', credits: 3 },
+      { code: 'CNIT 37100', name: 'Cyberlaw And Ethics', credits: 3 },
+      { code: 'ECON 25100', name: 'Microeconomics', credits: 3 },
+      { code: 'ECON 25200', name: 'Macroeconomics', credits: 3 },
+      { code: 'IE 54600', name: 'Economic Decisions In Engineering', credits: 3 },
+    ]
+  },
+  {
+    id: 'transportation',
+    label: 'Space Transportation',
+    short: 'Space Transportation',
+    subTracks: null,
+    courses: [
+      { code: 'AAE 33800', name: 'Thermal Sciences', credits: 3 },
+      { code: 'AAE 33900', name: 'Aerospace Propulsion', credits: 3 },
+      { code: 'AAE 35103', name: 'Aerospace Systems Design', credits: 3 },
+      { code: 'AAE 44000', name: 'Spacecraft Attitude Dynamics', credits: 3 },
+      { code: 'AAE 45000', name: 'Spacecraft Design', credits: 3 },
+      { code: 'AAE 51800', name: 'Low-Gravity Fluid Dynamics', credits: 3 },
+      { code: 'AAE 53200', name: 'Orbit Mechanics', credits: 3 },
+      { code: 'AAE 53300', name: 'Space Traffic Engineering Management', credits: 3 },
+      { code: 'AAE 53400', name: 'Spacecraft Electric Propulsion', credits: 3 },
+      { code: 'AAE 53500', name: 'Propulsion Design, Build, Test', credits: 3 },
+      { code: 'AAE 53900', name: 'Advanced Rocket Propulsion', credits: 3 },
+      { code: 'AAE 56400', name: 'Systems Analysis And Synthesis', credits: 3 },
+      { code: 'AAE 57100', name: 'Complex System Safety', credits: 3 },
+      { code: 'AAE 57500', name: 'Introduction To Satellite Navigation And Positioning', credits: 3 },
+      { code: 'ME 31500', name: 'Heat And Mass Transfer', credits: 4 },
+      { code: 'ME 46300', name: 'Engineering Design', credits: 3 },
+      { code: 'ME 50500', name: 'Intermediate Heat Transfer', credits: 3 },
+      { code: 'ME 50600', name: 'Two-Phase Flow And Heat Transfer', credits: 3 },
+      { code: 'ME 56200', name: 'Advanced Dynamics', credits: 3 },
+      { code: 'ME 57100', name: 'Reliability Based Design', credits: 3 },
+      { code: 'NUCL 35100', name: 'Nuclear Thermal-Hydraulics II', credits: 3 },
+      { code: 'NUCL 35500', name: 'Nuclear Thermohydraulics Laboratory', credits: 3 },
+      { code: 'NUCL 55100', name: 'Mass, Momentum, And Energy Transfer In Energy Systems', credits: 3 },
+    ]
+  },
+  {
+    id: 'manufacturing',
+    label: 'In-Space Manufacturing, Assembly & Debris Management',
+    short: 'Manufacturing & Assembly',
+    subTracks: null,
+    courses: [
+      { code: 'AAE 41800', name: 'Zero-Gravity Flight Experiment', credits: 3 },
+      { code: 'AAE 44000', name: 'Spacecraft Attitude Dynamics', credits: 3 },
+      { code: 'AAE 53200', name: 'Orbit Mechanics', credits: 3 },
+      { code: 'AAE 53300', name: 'Space Traffic Engineering Management', credits: 3 },
+      { code: 'IE 47000', name: 'Manufacturing Processes II', credits: 3 },
+      { code: 'IE 47200', name: 'Imagine, Model, Make', credits: 3 },
+      { code: 'IE 48400', name: 'Integrated Production Systems II', credits: 3 },
+      { code: 'IE 56600', name: 'Production Management Control', credits: 3 },
+      { code: 'IE 57400', name: 'Industrial Robotics And Flexible Assembly', credits: 3 },
+      { code: 'IE 58300', name: 'Design And Evaluation Of Material Handling Systems', credits: 3 },
+    ]
+  },
+  {
+    id: 'humans',
+    label: 'Humans Living and Exploring in Space',
+    short: 'Humans in Space',
+    subTracks: [
+      {
+        id: 'habitat-design',
+        label: 'Habitat Design including ISRU',
+        courses: [
+          { code: 'AAE 55200', name: 'Nondestructive Evaluation Of Structures And Materials', credits: 3 },
+          { code: 'AAE 55300', name: 'Elasticity In Aerospace Engineering', credits: 3 },
+          { code: 'AAE 55400', name: 'Fatigue Of Structures And Materials', credits: 3 },
+          { code: 'AAE 55800', name: 'Finite Element Methods In Aerospace Structures', credits: 3 },
+          { code: 'AAE 57100', name: 'Complex System Safety', credits: 3 },
+          { code: 'CE 47300',  name: 'Reinforced Concrete Design', credits: 4 },
+          { code: 'CE 47400',  name: 'Structural Analysis II', credits: 3 },
+          { code: 'CE 48300',  name: 'Geotechnical Engineering II', credits: 3 },
+          { code: 'CE 57000',  name: 'Advanced Structural Mechanics', credits: 3 },
+          { code: 'CE 57100',  name: 'Earthquake Engineering', credits: 3 },
+          { code: 'CE 57300',  name: 'Structural Dynamics', credits: 3 },
+          { code: 'CE 57600',  name: 'Advanced Reinforced Concrete Design', credits: 3 },
+          { code: 'CE 59500',  name: 'Finite Elements In Elasticity', credits: 3 },
+          { code: 'ME 53900',  name: 'Introduction To Scientific Machine Learning', credits: 3 },
+          { code: 'ME 56200',  name: 'Advanced Dynamics', credits: 3 },
+          { code: 'ME 56300',  name: 'Mechanical Vibrations', credits: 3 },
+          { code: 'ME 57100',  name: 'Reliability Based Design', credits: 3 },
+        ]
+      },
+      {
+        id: 'life-support',
+        label: 'Habitat Life Support / Thermal',
+        courses: [
+          { code: 'AAE 57100', name: 'Complex System Safety', credits: 3 },
+          { code: 'CE 41300',  name: 'Building Envelope Design And Thermal Loads', credits: 3 },
+          { code: 'CE 51401',  name: 'Building Controls', credits: 3 },
+          { code: 'ME 41500',  name: 'Energy Systems Engineering', credits: 3 },
+          { code: 'ME 41800',  name: 'Engineering Of Environmental Systems And Equipment', credits: 3 },
+          { code: 'ME 50100',  name: 'Statistical Thermodynamics', credits: 3 },
+          { code: 'ME 50500',  name: 'Intermediate Heat Transfer', credits: 3 },
+          { code: 'ME 50600',  name: 'Two-Phase Flow And Heat Transfer', credits: 3 },
+          { code: 'ME 51100',  name: 'Heat Transfer In Electronic Systems', credits: 3 },
+          { code: 'ME 53900',  name: 'Introduction To Scientific Machine Learning', credits: 3 },
+          { code: 'ME 57500',  name: 'Theory And Design Of Control Systems', credits: 3 },
+          { code: 'ME 57800',  name: 'Digital Control', credits: 3 },
+          { code: 'ME 58800',  name: 'Mechatronics — Integrated Design Of Electro-Mechanical Systems', credits: 3 },
+        ]
+      },
+      {
+        id: 'robotic',
+        label: 'Habitat Robotic Construction',
+        courses: [
+          { code: 'AAE 55200', name: 'Nondestructive Evaluation Of Structures And Materials', credits: 3 },
+          { code: 'CE 48300',  name: 'Geotechnical Engineering II', credits: 3 },
+          { code: 'EAPS 55700',name: 'Introduction To Seismology', credits: 3 },
+          { code: 'ME 36500',  name: 'Measurement And Control Systems I', credits: 3 },
+          { code: 'ME 37500',  name: 'Measurement And Control Systems II', credits: 3 },
+          { code: 'ME 57200',  name: 'Analysis And Design Of Robotic Manipulators', credits: 3 },
+          { code: 'ME 57500',  name: 'Theory And Design Of Control Systems', credits: 3 },
+          { code: 'ME 57800',  name: 'Digital Control', credits: 3 },
+          { code: 'ME 58800',  name: 'Mechatronics — Integrated Design Of Electro-Mechanical Systems', credits: 3 },
+          { code: 'ECE 32100', name: 'Electromechanical Motion Devices', credits: 3 },
+        ]
+      }
+    ]
+  }
+];
 
-/* Category config
-   isMin: true  → green when credits >= target (minimum, not exact)
-   isMin: false → green when credits === target (exact)
-*/
-const CATEGORIES = {
-  seminar:   { target: 1,  label: 'Space Engineering Seminar',      isMin: false },
-  primary:   { target: 9,  label: 'Primary Space Industry',         isMin: true  },
-  secondary: { target: 3,  label: 'Secondary Space Industry',       isMin: true  },
-  practical: { target: 3,  label: 'Practical Aerospace Experience',  isMin: false }
-};
-
+/* ══════════════════════════════════════════════════════════════
+   STATE
+══════════════════════════════════════════════════════════════ */
 const state = {
   seminar:   { credits: 0, courses: [] },
-  primary:   { credits: 0, courses: [] },
-  secondary: { credits: 0, courses: [] },
-  practical: { credits: 0, courses: [], isNA: false, selected: false }
+  primary:   { trackId: null, subTrackId: null, credits: 0, courses: [] },
+  secondary: { trackId: null, subTrackId: null, credits: 0, courses: [] },
+  practical: { credits: 0, isNA: false, selected: false }
 };
 
-/* Map course codes to all their checkbox DOM nodes for cross-instance sync */
-const courseCodeMap = {};
+/* ══════════════════════════════════════════════════════════════
+   HELPERS
+══════════════════════════════════════════════════════════════ */
+function getTrack(id) { return TRACKS.find(t => t.id === id) || null; }
 
-document.querySelectorAll('.course-check').forEach(chk => {
-  const row  = chk.closest('.course-row');
-  const code = row.dataset.courseCode;
-  if (!courseCodeMap[code]) courseCodeMap[code] = [];
-  courseCodeMap[code].push(chk);
-});
+function getCoursesForCat(cat) {
+  const s = state[cat];
+  if (!s.trackId) return null;
+  const track = getTrack(s.trackId);
+  if (!track) return null;
+  if (track.subTracks) {
+    if (!s.subTrackId) return null;
+    const sub = track.subTracks.find(st => st.id === s.subTrackId);
+    return sub ? sub.courses : null;
+  }
+  return track.courses;
+}
 
-/* ── Duplicate sync ─────────────────────────────────────────── */
-function syncDuplicates (code, sourceChk) {
-  const siblings = courseCodeMap[code] || [];
-  const isNowChecked = sourceChk.checked;
-  siblings.forEach(chk => {
-    if (chk === sourceChk) return;
-    if (isNowChecked) {
-      chk.disabled = true;
-      chk.closest('.course-row').classList.add('disabled-row');
-    } else {
-      chk.disabled = false;
-      chk.closest('.course-row').classList.remove('disabled-row');
-    }
+function getSelectedCodesForCat(cat) {
+  return new Set(state[cat].courses.map(c => c.code));
+}
+
+/* ══════════════════════════════════════════════════════════════
+   RENDER TRACK OPTIONS
+══════════════════════════════════════════════════════════════ */
+function renderTrackOptions(cat) {
+  const container = document.getElementById(`${cat}-track-options`);
+  container.innerHTML = '';
+  TRACKS.forEach(track => {
+    const card = document.createElement('div');
+    card.className = 'track-card';
+    card.dataset.trackId = track.id;
+    card.innerHTML = `
+      <div class="track-radio-dot"></div>
+      <div>
+        <div class="track-card-name">${track.label}</div>
+        ${track.subTracks ? '<div class="track-card-note">Sub-track selection required</div>' : ''}
+      </div>`;
+    card.addEventListener('click', () => onTrackClick(cat, track.id));
+    container.appendChild(card);
+  });
+
+  const subContainer = document.getElementById(`${cat}-subtrack-options`);
+  subContainer.innerHTML = '';
+  getTrack('humans').subTracks.forEach(sub => {
+    const card = document.createElement('div');
+    card.className = 'track-card';
+    card.dataset.subtrackId = sub.id;
+    card.innerHTML = `
+      <div class="track-radio-dot"></div>
+      <div><div class="track-card-name">${sub.label}</div></div>`;
+    card.addEventListener('click', () => onSubTrackClick(cat, sub.id));
+    subContainer.appendChild(card);
   });
 }
 
-/* ── Bar color helper ───────────────────────────────────────── */
-function getBarColor (pct) {
+/* ══════════════════════════════════════════════════════════════
+   TRACK / SUB-TRACK SELECTION
+══════════════════════════════════════════════════════════════ */
+function onTrackClick(cat, trackId) {
+  if (state[cat].trackId === trackId) return;
+  if (state[cat].courses.length > 0 &&
+      !confirm('Changing your track will clear your selected courses. Continue?')) return;
+
+  clearCatCourses(cat);
+  state[cat].trackId = trackId;
+  state[cat].subTrackId = null;
+
+  const track = getTrack(trackId);
+
+  document.querySelectorAll(`#${cat}-track-options .track-card`).forEach(card => {
+    card.classList.toggle('selected', card.dataset.trackId === trackId);
+  });
+
+  const subSel = document.getElementById(`${cat}-subtrack-selector`);
+  if (track.subTracks) {
+    document.querySelectorAll(`#${cat}-subtrack-options .track-card`).forEach(c => c.classList.remove('selected'));
+    subSel.style.display = 'block';
+    showPlaceholder(cat, 'Select a sub-track above to view available courses');
+  } else {
+    subSel.style.display = 'none';
+    renderCourses(cat);
+  }
+
+  updateTrackerLabel(cat, track.short);
+  updateCard(cat);
+  updateTotal();
+
+  if (cat === 'primary') {
+    unlockSecondary();
+    refreshSecondaryDisabledTracks();
+  }
+}
+
+function onSubTrackClick(cat, subTrackId) {
+  if (state[cat].subTrackId === subTrackId) return;
+  if (state[cat].courses.length > 0 &&
+      !confirm('Changing your sub-track will clear your selected courses. Continue?')) return;
+
+  clearCatCourses(cat);
+  state[cat].subTrackId = subTrackId;
+
+  document.querySelectorAll(`#${cat}-subtrack-options .track-card`).forEach(card => {
+    card.classList.toggle('selected', card.dataset.subtrackId === subTrackId);
+  });
+
+  renderCourses(cat);
+
+  const track = getTrack(state[cat].trackId);
+  const sub = track.subTracks.find(s => s.id === subTrackId);
+  updateTrackerLabel(cat, `${track.short} — ${sub.label}`);
+  updateCard(cat);
+  updateTotal();
+}
+
+/* ══════════════════════════════════════════════════════════════
+   COURSE RENDERING
+══════════════════════════════════════════════════════════════ */
+function showPlaceholder(cat, msg) {
+  document.getElementById(`${cat}-placeholder`).querySelector('span').textContent = msg;
+  document.getElementById(`${cat}-placeholder`).style.display = 'flex';
+  const list = document.getElementById(`${cat}-course-list`);
+  list.style.display = 'none';
+  list.innerHTML = '';
+}
+
+function renderCourses(cat) {
+  const courses = getCoursesForCat(cat);
+  const placeholder = document.getElementById(`${cat}-placeholder`);
+  const list = document.getElementById(`${cat}-course-list`);
+
+  if (!courses) { showPlaceholder(cat, 'Select a track above to view available courses'); return; }
+
+  placeholder.style.display = 'none';
+  list.style.display = 'block';
+  list.innerHTML = '';
+
+  const otherCat = cat === 'primary' ? 'secondary' : 'primary';
+  const otherSelected = getSelectedCodesForCat(otherCat);
+
+  courses.forEach(course => {
+    const isDisabled = otherSelected.has(course.code);
+    const row = document.createElement('label');
+    row.className = 'course-row' + (isDisabled ? ' disabled-row' : '');
+    row.dataset.credits = course.credits;
+    row.dataset.courseCode = course.code;
+    row.innerHTML = `
+      <input class="course-check" type="checkbox" data-credits="${course.credits}"${isDisabled ? ' disabled' : ''} />
+      <div>
+        <div class="course-code">${course.code}</div>
+        <div class="course-name">${course.name}</div>
+      </div>
+      <div class="course-credits-badge">${course.credits} credit${course.credits !== 1 ? 's' : ''}</div>`;
+    row.querySelector('.course-check').addEventListener('change', function () {
+      handleCourseCheck(this, cat, course.name);
+    });
+    list.appendChild(row);
+  });
+}
+
+/* ══════════════════════════════════════════════════════════════
+   COURSE CHECK HANDLER
+══════════════════════════════════════════════════════════════ */
+function handleCourseCheck(chk, cat, courseName) {
+  const row = chk.closest('.course-row');
+  const credits = parseInt(chk.dataset.credits, 10);
+  const code = row.dataset.courseCode;
+
+  if (chk.checked) {
+    state[cat].credits += credits;
+    state[cat].courses.push({ code, credits, name: courseName });
+    row.classList.add('selected');
+    disableInOtherCat(code, cat);
+  } else {
+    state[cat].credits -= credits;
+    state[cat].courses = state[cat].courses.filter(c => c.code !== code);
+    row.classList.remove('selected');
+    enableInOtherCat(code, cat);
+  }
+
+  updateCard(cat);
+  updateTotal();
+}
+
+function disableInOtherCat(code, sourceCat) {
+  const otherCat = sourceCat === 'primary' ? 'secondary' : 'primary';
+  document.querySelectorAll(`#${otherCat}-course-list .course-row[data-course-code="${code}"]`).forEach(row => {
+    row.classList.add('disabled-row');
+    row.querySelector('.course-check').disabled = true;
+  });
+}
+
+function enableInOtherCat(code, sourceCat) {
+  const otherCat = sourceCat === 'primary' ? 'secondary' : 'primary';
+  document.querySelectorAll(`#${otherCat}-course-list .course-row[data-course-code="${code}"]`).forEach(row => {
+    row.classList.remove('disabled-row');
+    row.querySelector('.course-check').disabled = false;
+  });
+}
+
+/* ══════════════════════════════════════════════════════════════
+   CLEAR HELPERS
+══════════════════════════════════════════════════════════════ */
+function clearCatCourses(cat) {
+  state[cat].courses.forEach(c => enableInOtherCat(c.code, cat));
+  state[cat].credits = 0;
+  state[cat].courses = [];
+  const list = document.getElementById(`${cat}-course-list`);
+  if (list) list.innerHTML = '';
+}
+
+function clearCat(cat) {
+  clearCatCourses(cat);
+  state[cat].trackId = null;
+  state[cat].subTrackId = null;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   SECONDARY LOCK
+══════════════════════════════════════════════════════════════ */
+function unlockSecondary() {
+  document.getElementById('secondary-lock-msg').style.display = 'none';
+  document.getElementById('secondary-selector-area').style.display = 'block';
+}
+
+function refreshSecondaryDisabledTracks() {
+  const primaryId = state.primary.trackId;
+  document.querySelectorAll('#secondary-track-options .track-card').forEach(card => {
+    card.classList.toggle('disabled', card.dataset.trackId === primaryId);
+  });
+}
+
+/* ══════════════════════════════════════════════════════════════
+   TRACKER
+══════════════════════════════════════════════════════════════ */
+function updateTrackerLabel(cat, text) {
+  document.getElementById(`${cat}-tracker-track`).textContent = text ? `— ${text}` : '— Not Selected';
+}
+
+function getBarColor(pct) {
   if (pct >= 1)   return 'green';
   if (pct >= 0.5) return 'yellow';
   return '';
 }
 
-/* ── Update a category tracker card ────────────────────────── */
-function updateCard (cat) {
-  const cfg  = CATEGORIES[cat];
-  const s    = state[cat];
-
+function updateCard(cat) {
   if (cat === 'practical') { updatePracticalCard(); return; }
 
-  const pct  = Math.min(s.credits / cfg.target, 1);
-  const done = cfg.isMin ? s.credits >= cfg.target : s.credits === cfg.target;
+  const targets = { seminar: 1, primary: 9, secondary: 3 };
+  const target  = targets[cat];
+  const credits = state[cat].credits;
+  const pct     = Math.min(credits / target, 1);
+  const done    = credits >= target;
 
-  document.getElementById(`tally-${cat}`).textContent = s.credits;
+  document.getElementById(`tally-${cat}`).textContent = credits;
 
   const bar = document.getElementById(`bar-${cat}`);
   bar.style.width = (pct * 100) + '%';
@@ -1659,231 +1661,250 @@ function updateCard (cat) {
 
   const card = document.getElementById(`card-${cat}`);
   card.classList.remove('status-yellow', 'status-green');
-  if (done)         card.classList.add('status-green');
+  if (done)            card.classList.add('status-green');
   else if (pct >= 0.5) card.classList.add('status-yellow');
 
   const statusEl = document.getElementById(`status-${cat}`);
-  if (done) {
+  if (!state[cat].trackId && cat !== 'seminar') {
+    statusEl.textContent = 'Select a track first';
+  } else if (done) {
     statusEl.textContent = '✓ Minimum met';
   } else {
-    const rem = cfg.target - s.credits;
-    statusEl.textContent = `${rem} cr remaining`;
+    statusEl.textContent = `${target - credits} cr remaining`;
   }
 
   const listEl = document.getElementById(`courses-${cat}`);
   listEl.innerHTML = '';
-  for (const c of s.courses) {
+  state[cat].courses.forEach(c => {
     const div = document.createElement('div');
     div.className = 'tracker-course-item';
     div.innerHTML = `<span>${c.code}</span><span>${c.credits} cr</span>`;
     listEl.appendChild(div);
-  }
+  });
 }
 
-/* ── Practical card special handling ───────────────────────── */
-function updatePracticalCard () {
-  const s    = state.practical;
+function updatePracticalCard() {
+  const s = state.practical;
   const card = document.getElementById('card-practical');
   const tallyEl  = document.getElementById('tally-practical');
-  const tallyTarget = document.getElementById('tally-practical-target');
-  const tallySep = document.getElementById('tally-practical-sep');
-  const bar  = document.getElementById('bar-practical');
+  const tSep     = document.getElementById('tally-practical-sep');
+  const tTarget  = document.getElementById('tally-practical-target');
+  const bar      = document.getElementById('bar-practical');
   const statusEl = document.getElementById('status-practical');
-  const naNote = document.getElementById('practical-na-note');
-  const naWarning = document.getElementById('na-warning');
+  const naNote   = document.getElementById('practical-na-note');
+  const naWarning= document.getElementById('na-warning');
 
-  card.classList.remove('status-green', 'status-yellow', 'na-mode');
+  card.classList.remove('status-green','status-yellow','na-mode');
   naNote.style.display = 'none';
   naWarning.classList.remove('visible');
 
   if (!s.selected) {
     tallyEl.textContent = '—';
-    tallySep.style.visibility = 'hidden';
-    tallyTarget.style.visibility = 'hidden';
-    bar.style.width = '0%';
-    bar.className = 'tracker-bar';
+    tSep.style.visibility = 'hidden';
+    tTarget.style.visibility = 'hidden';
+    bar.style.width = '0%'; bar.className = 'tracker-bar';
     statusEl.textContent = 'Select an option below';
     return;
   }
 
-  tallySep.style.visibility = 'visible';
-  tallyTarget.style.visibility = 'visible';
+  tSep.style.visibility = 'visible';
+  tTarget.style.visibility = 'visible';
 
   if (s.isNA) {
     card.classList.add('na-mode');
     tallyEl.textContent = '—';
-    tallyTarget.textContent = 'N/A';
-    bar.style.width = '0%';
-    bar.className = 'tracker-bar';
+    tTarget.textContent = 'N/A';
+    bar.style.width = '0%'; bar.className = 'tracker-bar';
     statusEl.textContent = 'Waived — select credits above';
     naNote.style.display = 'block';
     naWarning.classList.add('visible');
   } else {
     tallyEl.textContent = '3';
-    tallyTarget.textContent = '3 cr';
-    bar.style.width = '100%';
-    bar.className = 'tracker-bar green';
+    tTarget.textContent = '3 cr';
+    bar.style.width = '100%'; bar.className = 'tracker-bar green';
     statusEl.textContent = '✓ Practical confirmed';
     card.classList.add('status-green');
   }
-
-  document.getElementById('courses-practical').innerHTML = '';
 }
 
-/* ── Check if all requirements are met ─────────────────────── */
-function isAllMet () {
-  const s = state;
-  if (s.seminar.credits < 1)  return false;
-  if (s.primary.credits < 9)  return false;
-  if (s.secondary.credits < 3) return false;
-  if (!s.practical.selected)   return false;
-
-  if (s.practical.isNA) {
-    /* Need primary + secondary to cover the missing 3 practical credits */
-    if (s.primary.credits + s.secondary.credits < 15) return false;
-  }
-
-  const total = s.seminar.credits + s.primary.credits + s.secondary.credits +
-                (s.practical.isNA ? 0 : s.practical.credits);
+function isAllMet() {
+  if (state.seminar.credits < 1)   return false;
+  if (!state.primary.trackId)      return false;
+  if (state.primary.credits < 9)   return false;
+  if (!state.secondary.trackId)    return false;
+  if (state.secondary.credits < 3) return false;
+  if (!state.practical.selected)   return false;
+  if (state.practical.isNA && state.primary.credits + state.secondary.credits < 15) return false;
+  const total = state.seminar.credits + state.primary.credits + state.secondary.credits +
+                (state.practical.isNA ? 0 : state.practical.credits);
   return total >= 16;
 }
 
-/* ── Update total card ──────────────────────────────────────── */
-function updateTotal () {
-  const total  = state.seminar.credits + state.primary.credits +
-                 state.secondary.credits +
-                 (state.practical.isNA ? 0 : state.practical.credits);
+function updateTotal() {
+  const total = state.seminar.credits + state.primary.credits + state.secondary.credits +
+                (state.practical.isNA ? 0 : state.practical.credits);
   const pct    = Math.min(total / 16, 1);
   const allMet = isAllMet();
 
   document.getElementById('tally-total').textContent = total;
-
   const bar = document.getElementById('bar-total');
   bar.style.width = (pct * 100) + '%';
-  bar.className   = 'tracker-bar ' + getBarColor(pct);
+  bar.className = 'tracker-bar ' + getBarColor(pct);
 
   const card = document.getElementById('card-total');
-  card.classList.remove('status-yellow', 'status-green');
-  if (allMet)         card.classList.add('status-green');
-  else if (pct >= 0.5) card.classList.add('status-yellow');
+  card.classList.remove('status-yellow','status-green');
+  if (allMet)           card.classList.add('status-green');
+  else if (pct >= 0.5)  card.classList.add('status-yellow');
 
   const statusEl = document.getElementById('status-total');
   if (allMet) {
     statusEl.textContent = '✓ All requirements met!';
+  } else if (!state.primary.trackId) {
+    statusEl.textContent = 'Select a primary track';
+  } else if (!state.secondary.trackId) {
+    statusEl.textContent = 'Select a secondary track';
   } else if (!state.practical.selected) {
     statusEl.textContent = 'Declare practical experience';
   } else {
-    const incomplete = [];
-    if (state.seminar.credits < 1) incomplete.push('Seminar');
-    if (state.primary.credits < 9) incomplete.push('Primary');
-    if (state.secondary.credits < 3) incomplete.push('Secondary');
-    if (state.practical.isNA && state.primary.credits + state.secondary.credits < 15) {
-      incomplete.push('+3 cr needed');
-    }
-    statusEl.textContent = incomplete.length
-      ? incomplete.join(', ') + ' incomplete'
-      : `${16 - total} cr remaining`;
+    const rem = 16 - total;
+    statusEl.textContent = rem > 0 ? `${rem} cr remaining` : 'Check category minimums';
   }
 
   document.getElementById('btn-generate').disabled = !allMet;
 }
 
-/* ── Bind course checkboxes ─────────────────────────────────── */
-document.querySelectorAll('.course-list').forEach(list => {
-  const cat = list.dataset.category;
-  if (cat === 'practical') return; // handled separately
-
-  list.querySelectorAll('.course-check').forEach(chk => {
-    chk.addEventListener('change', function () {
-      const row     = this.closest('.course-row');
-      const credits = parseInt(this.dataset.credits, 10);
-      const code    = row.dataset.courseCode;
-      const name    = row.querySelector('.course-name').textContent.trim();
-
-      if (this.checked) {
-        state[cat].credits += credits;
-        state[cat].courses.push({ code, credits });
-        row.classList.add('selected');
-      } else {
-        state[cat].credits -= credits;
-        state[cat].courses = state[cat].courses.filter(c => c.code !== code);
-        row.classList.remove('selected');
-      }
-
-      syncDuplicates(code, this);
-      updateCard(cat);
-      updateTotal();
-    });
-  });
+/* ══════════════════════════════════════════════════════════════
+   SEMINAR
+══════════════════════════════════════════════════════════════ */
+document.querySelector('#seminar-course-list .course-check').addEventListener('change', function () {
+  const credits = parseInt(this.dataset.credits, 10);
+  const code = this.closest('.course-row').dataset.courseCode;
+  if (this.checked) {
+    state.seminar.credits = credits;
+    state.seminar.courses = [{ code, credits, name: 'Space Engineering Seminar Credits' }];
+    this.closest('.course-row').classList.add('selected');
+  } else {
+    state.seminar.credits = 0;
+    state.seminar.courses = [];
+    this.closest('.course-row').classList.remove('selected');
+  }
+  updateCard('seminar');
+  updateTotal();
 });
 
-/* ── Bind practical radio buttons ───────────────────────────── */
+/* ══════════════════════════════════════════════════════════════
+   PRACTICAL RADIOS
+══════════════════════════════════════════════════════════════ */
 document.querySelectorAll('input[name="practical-choice"]').forEach(radio => {
   radio.addEventListener('change', function () {
-    const row     = this.closest('.course-row');
-    const credits = parseInt(this.dataset.credits, 10);
-    const isNA    = this.dataset.na === 'true';
-
-    /* Clear selected state from all practical rows */
-    document.querySelectorAll('#section-practical .course-row').forEach(r => {
-      r.classList.remove('selected');
-    });
-
-    row.classList.add('selected');
-    state.practical.credits  = credits;
-    state.practical.isNA     = isNA;
+    document.querySelectorAll('#practical-course-list .course-row').forEach(r => r.classList.remove('selected'));
+    this.closest('.course-row').classList.add('selected');
+    state.practical.credits  = parseInt(this.dataset.credits, 10);
+    state.practical.isNA     = this.dataset.na === 'true';
     state.practical.selected = true;
-
     updatePracticalCard();
     updateTotal();
   });
 });
 
-/* ── Reset ──────────────────────────────────────────────────── */
+/* ══════════════════════════════════════════════════════════════
+   RESET
+══════════════════════════════════════════════════════════════ */
 document.getElementById('btn-reset').addEventListener('click', () => {
-  /* Uncheck / unenable all course checkboxes */
-  document.querySelectorAll('.course-check').forEach(chk => {
-    chk.checked  = false;
-    chk.disabled = false;
-    chk.closest('.course-row').classList.remove('selected', 'disabled-row');
+  ['primary','secondary'].forEach(cat => {
+    clearCat(cat);
+    document.querySelectorAll(`#${cat}-track-options .track-card`).forEach(c => c.classList.remove('selected'));
+    document.querySelectorAll(`#${cat}-subtrack-options .track-card`).forEach(c => c.classList.remove('selected'));
+    document.getElementById(`${cat}-subtrack-selector`).style.display = 'none';
+    showPlaceholder(cat, 'Select a track above to view available courses');
+    updateTrackerLabel(cat, null);
+    updateCard(cat);
   });
+  document.getElementById('secondary-lock-msg').style.display = 'flex';
+  document.getElementById('secondary-selector-area').style.display = 'none';
 
-  /* Uncheck practical radios */
-  document.querySelectorAll('input[name="practical-choice"]').forEach(r => {
-    r.checked = false;
-    r.closest('.course-row').classList.remove('selected');
-  });
+  document.querySelector('#seminar-course-list .course-check').checked = false;
+  document.querySelector('#seminar-course-list .course-row').classList.remove('selected');
+  state.seminar.credits = 0; state.seminar.courses = [];
+  updateCard('seminar');
 
-  /* Reset state */
-  for (const cat of Object.keys(state)) {
-    state[cat].credits = 0;
-    state[cat].courses = [];
-  }
-  state.practical.isNA     = false;
-  state.practical.selected = false;
-
-  /* Reset tracker cards */
-  ['seminar','primary','secondary'].forEach(cat => updateCard(cat));
+  document.querySelectorAll('input[name="practical-choice"]').forEach(r => r.checked = false);
+  document.querySelectorAll('#practical-course-list .course-row').forEach(r => r.classList.remove('selected'));
+  state.practical = { credits: 0, isNA: false, selected: false };
+  document.getElementById('na-warning').classList.remove('visible');
   updatePracticalCard();
   updateTotal();
-
-  /* Hide N/A warning */
-  document.getElementById('na-warning').classList.remove('visible');
 });
 
-/* ── Submit ─────────────────────────────────────────────────── */
+/* ══════════════════════════════════════════════════════════════
+   PDF PRINTOUT
+══════════════════════════════════════════════════════════════ */
+function buildCourseRows(courses) {
+  if (!courses.length) {
+    return '<tr><td colspan="3" style="color:#9D9795;font-style:italic;padding:4pt 6pt">None selected</td></tr>';
+  }
+  return courses.map(c =>
+    `<tr>
+       <td class="td-code">${c.code}</td>
+       <td>${c.name}</td>
+       <td class="td-credits">${c.credits} cr</td>
+     </tr>`
+  ).join('');
+}
+
+function buildTrackLabel(cat) {
+  const s = state[cat];
+  const track = getTrack(s.trackId);
+  if (!track) return 'Not selected';
+  let label = track.label;
+  if (track.subTracks && s.subTrackId) {
+    const sub = track.subTracks.find(st => st.id === s.subTrackId);
+    if (sub) label += ` — ${sub.label}`;
+  }
+  return label;
+}
+
 document.getElementById('btn-generate').addEventListener('click', () => {
-  const lines = [
-    `Space Engineering Seminar: ${state.seminar.courses.map(c => c.code).join(', ')}`,
-    `Primary Space Industry (${state.primary.credits} cr): ${state.primary.courses.map(c => c.code).join(', ')}`,
-    `Secondary Space Industry (${state.secondary.credits} cr): ${state.secondary.courses.map(c => c.code).join(', ')}`,
-    `Practical Experience: ${state.practical.isNA ? 'Not Applicable (0 cr)' : 'Confirmed (3 cr)'}`
-  ];
-  const total = state.seminar.credits + state.primary.credits + state.secondary.credits +
-                (state.practical.isNA ? 0 : state.practical.credits);
-  alert(`Plan of Study Submitted!\n\n${lines.join('\n')}\n\nTotal: ${total} credits`);
-});
-</script>
+  const today = new Date().toLocaleDateString('en-US', { year:'numeric', month:'long', day:'numeric' });
 
+  /* Date */
+  document.getElementById('ps-date').textContent = `Generated: ${today}`;
+  document.getElementById('ps-footer-date').textContent = today;
+
+  /* Seminar */
+  document.getElementById('ps-seminar-credits').textContent = `${state.seminar.credits} cr`;
+  document.getElementById('ps-seminar-body').innerHTML = buildCourseRows(state.seminar.courses);
+
+  /* Primary */
+  document.getElementById('ps-primary-credits').textContent = `${state.primary.credits} cr`;
+  document.getElementById('ps-primary-track').textContent = buildTrackLabel('primary');
+  document.getElementById('ps-primary-body').innerHTML = buildCourseRows(state.primary.courses);
+
+  /* Secondary */
+  document.getElementById('ps-secondary-credits').textContent = `${state.secondary.credits} cr`;
+  document.getElementById('ps-secondary-track').textContent = buildTrackLabel('secondary');
+  document.getElementById('ps-secondary-body').innerHTML = buildCourseRows(state.secondary.courses);
+
+  /* Practical */
+  const practicalCr = state.practical.isNA ? 0 : 3;
+  document.getElementById('ps-practical-credits').textContent = `${practicalCr} cr`;
+  document.getElementById('ps-practical-status').textContent = state.practical.isNA
+    ? 'Not Applicable — no qualifying practical experience declared. Additional 3 credits selected from Primary or Secondary track.'
+    : 'Qualifying practical aerospace experience confirmed (3 credits toward certificate total).';
+
+  /* Total */
+  const total = state.seminar.credits + state.primary.credits + state.secondary.credits + practicalCr;
+  document.getElementById('ps-total-value').textContent = total;
+
+  /* Print */
+  window.print();
+});
+
+/* ══════════════════════════════════════════════════════════════
+   INIT
+══════════════════════════════════════════════════════════════ */
+renderTrackOptions('primary');
+renderTrackOptions('secondary');
+</script>
 </body>
 </html>
