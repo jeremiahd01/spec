@@ -1132,35 +1132,36 @@
       <h2 class="section-title">Required Practical Aerospace Experience</h2>
     </div>
     <hr class="section-rule" />
-    <p class="section-meta">Declare your practical experience status (<span class="target">0–3 credit hours</span>)</p>
-    <div class="practical-note">
-      Qualifying experiences include: <span class="highlight">campus-based research</span> in an aerospace topic,
-      a <span class="highlight">design-build-test project course</span>, relevant work through a
-      <span class="highlight">Purdue student organization</span> (e.g., Purdue Space Program) or sponsored competition
-      (e.g., NASA Lunabotics), or an <span class="highlight">off-campus internship or co-op rotation</span> in an aerospace topic.
-      If your practical experience provides 0 credit, you must select an additional 3-credit course from any Space Industry area.
-    </div>
+    <p class="section-meta">Declare your practical experience type (<span class="target">0–3 credit hours</span>)</p>
     <div id="practical-course-list">
-      <label class="course-row" data-credits="3" data-course-code="PRACTICAL">
+      <label class="course-row na-option" data-credits="0" data-course-code="PRACTICAL-COOP">
+        <input class="course-radio" type="radio" name="practical-choice" data-credits="0" data-na="true" />
+        <div>
+          <div class="course-code">Co-op / Internship</div>
+          <div class="course-name">I have attended or plan to attend an aerospace-related co-op or internship (0 credits toward certificate — please add an additional course from your primary or secondary track)</div>
+        </div>
+        <div class="course-credits-badge">0 credits</div>
+      </label>
+      <label class="course-row" data-credits="3" data-course-code="PRACTICAL-APPLIED">
         <input class="course-radio" type="radio" name="practical-choice" data-credits="3" data-na="false" />
         <div>
-          <div class="course-code">Practical Experience</div>
-          <div class="course-name">I have qualifying practical aerospace experience (3 credits toward certificate)</div>
+          <div class="course-code">Applied Learning Course</div>
+          <div class="course-name">I have attended or plan to attend an applied learning course, such as: Design-Build-Test, Senior Design, Vertically Integrated Projects</div>
         </div>
         <div class="course-credits-badge">3 credits</div>
       </label>
-      <label class="course-row na-option" data-credits="0" data-course-code="PRACTICAL-NA">
-        <input class="course-radio" type="radio" name="practical-choice" data-credits="0" data-na="true" />
+      <label class="course-row" data-credits="3" data-course-code="PRACTICAL-CLUB">
+        <input class="course-radio" type="radio" name="practical-choice" data-credits="3" data-na="false" />
         <div>
-          <div class="course-code">Not Applicable</div>
-          <div class="course-name">I do not have qualifying practical experience — I will select 3 additional credits from Primary or Secondary</div>
+          <div class="course-code">Student Club / Competition</div>
+          <div class="course-name">I have participated or plan to participate in an aerospace-related student club or collegiate competition</div>
         </div>
-        <div class="course-credits-badge">0 credits</div>
+        <div class="course-credits-badge">3 credits</div>
       </label>
     </div>
     <div class="na-warning" id="na-warning">
       <i class="bi bi-info-circle me-1"></i>
-      Select an additional 3 credit hours from the Primary or Secondary Track sections above to meet the 16-credit minimum.
+      Co-op/internship experience provides 0 credits toward the certificate — select an additional 3 credit hours from your Primary or Secondary Track above to meet the 16-credit minimum.
     </div>
   </div>
 
@@ -1711,11 +1712,11 @@ function updatePracticalCard() {
   tTarget.style.visibility = 'visible';
 
   if (s.isNA) {
-    card.classList.add('na-mode');
-    tallyEl.textContent = '—';
-    tTarget.textContent = 'N/A';
+    tallyEl.textContent = '0';
+    tTarget.textContent = '0 cr';
     bar.style.width = '0%'; bar.className = 'tracker-bar';
-    statusEl.textContent = 'Waived — select credits above';
+    statusEl.textContent = '✓ Confirmed — add 3 cr above';
+    card.classList.add('status-green');
     naNote.style.display = 'block';
     naWarning.classList.add('visible');
   } else {
@@ -1889,8 +1890,8 @@ document.getElementById('btn-generate').addEventListener('click', () => {
   const practicalCr = state.practical.isNA ? 0 : 3;
   document.getElementById('ps-practical-credits').textContent = `${practicalCr} cr`;
   document.getElementById('ps-practical-status').textContent = state.practical.isNA
-    ? 'Not Applicable — no qualifying practical experience declared. Additional 3 credits selected from Primary or Secondary track.'
-    : 'Qualifying practical aerospace experience confirmed (3 credits toward certificate total).';
+    ? 'Co-op / Internship — 0 credits toward certificate. An additional 3 credits must be selected from the Primary or Secondary track.'
+    : 'Practical aerospace experience confirmed (3 credits toward certificate total).';
 
   /* Total */
   const total = state.seminar.credits + state.primary.credits + state.secondary.credits + practicalCr;
