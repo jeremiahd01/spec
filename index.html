@@ -429,6 +429,91 @@
     }
     .na-warning.visible { display: block; }
 
+    /* ─── Applied Learning Sub-section ──────────────────────── */
+    .applied-learning-section {
+      margin: 0 0 4px;
+      padding: 12px 18px 12px 66px;
+      background: var(--bg-tint);
+      border: 1px solid var(--border-soft);
+      border-left: 3px solid var(--purdue-gold-aged);
+      border-radius: 3px;
+    }
+    .applied-course-entry {
+      display: grid;
+      grid-template-columns: 1fr 78px 28px;
+      gap: 8px;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+    .applied-course-entry input[type="text"] {
+      font-family: 'Barlow', sans-serif;
+      font-size: 0.875rem;
+      font-weight: 300;
+      padding: 6px 10px;
+      border: 1px solid var(--border-soft);
+      border-radius: 2px;
+      background: var(--bg-panel);
+      color: var(--text-primary);
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      width: 100%;
+    }
+    .applied-course-entry input[type="text"]::placeholder { color: var(--railway-gray); font-style: italic; }
+    .applied-course-entry input[type="text"]:focus {
+      border-color: var(--purdue-gold-aged);
+      box-shadow: 0 0 0 3px var(--purdue-gold-glow);
+    }
+    .applied-course-entry select {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.7rem;
+      padding: 6px 6px;
+      border: 1px solid var(--border-soft);
+      border-radius: 2px;
+      background: var(--bg-panel);
+      color: var(--text-muted);
+      cursor: pointer;
+      outline: none;
+      width: 100%;
+      transition: border-color 0.2s;
+    }
+    .applied-course-entry select:focus { border-color: var(--purdue-gold-aged); }
+    .btn-remove-applied {
+      width: 26px; height: 26px;
+      border: 1px solid var(--border-rule);
+      border-radius: 2px;
+      background: transparent;
+      color: var(--railway-gray);
+      font-size: 1.1rem;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: color 0.2s, border-color 0.2s;
+      padding: 0; line-height: 1; flex-shrink: 0;
+    }
+    .btn-remove-applied:hover { color: var(--status-red); border-color: var(--status-red); }
+    .applied-section-footer {
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 8px; margin-top: 4px;
+    }
+    .btn-add-applied-course {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.62rem; letter-spacing: 0.06em;
+      padding: 5px 10px;
+      background: transparent; color: var(--purdue-gold-aged);
+      border: 1px dashed var(--purdue-gold-aged);
+      border-radius: 2px; cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+    }
+    .btn-add-applied-course:hover:not(:disabled) {
+      background: rgba(142,111,62,0.08); color: var(--purdue-gold-rush);
+    }
+    .btn-add-applied-course:disabled { opacity: 0.35; cursor: not-allowed; }
+    .applied-credits-total {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.62rem; letter-spacing: 0.04em;
+      color: var(--text-muted); display: flex; gap: 5px; align-items: center;
+    }
+    .applied-credits-total .subtotal-val { color: var(--purdue-gold-aged); font-weight: 600; }
+
     /* ─── Floating Tracker ───────────────────────────────────── */
     #tracker {
       position: fixed;
@@ -1036,7 +1121,9 @@
     <h1 class="page-title">Space Engineering<br><span>Certificate Program</span></h1>
     <p class="page-subtitle">
       Select a primary and secondary track, then choose courses to meet the credit requirements.
-      A minimum of 16 total credit hours must be fulfilled across all categories.
+      <br>- A minimum of 16 total credit hours must be fulfilled across all categories. 
+      <br>- 9 credit hours must be outside of the School of the student's primary BS degree.
+      <br>- Please direct questions to <a href="mailto:spec@purdue.edu">spec@purdue.edu</a>
     </p>
     <div class="requirement-pills">
       <div class="req-pill"><strong>1 cr</strong> &nbsp;Space Engineering Seminar</div>
@@ -1134,35 +1221,46 @@
     <hr class="section-rule" />
     <p class="section-meta">Declare your practical experience type (<span class="target">0–3 credit hours</span>)</p>
     <div id="practical-course-list">
+      <!-- Option 1: Co-op / Internship -->
       <label class="course-row na-option" data-credits="0" data-course-code="PRACTICAL-COOP">
-        <input class="course-radio" type="radio" name="practical-choice" data-credits="0" data-na="true" />
+        <input class="course-check practical-check" type="checkbox" id="practical-coop" data-option="coop" data-credits="0" />
         <div>
           <div class="course-code">Co-op / Internship</div>
           <div class="course-name">I have attended or plan to attend an aerospace-related co-op or internship (0 credits toward certificate — please add an additional course from your primary or secondary track)</div>
         </div>
         <div class="course-credits-badge">0 credits</div>
       </label>
-      <label class="course-row" data-credits="3" data-course-code="PRACTICAL-APPLIED">
-        <input class="course-radio" type="radio" name="practical-choice" data-credits="3" data-na="false" />
+      <!-- Option 2: Applied Learning Course -->
+      <label class="course-row" data-course-code="PRACTICAL-APPLIED" id="practical-applied-label">
+        <input class="course-check practical-check" type="checkbox" id="practical-applied" data-option="applied" />
         <div>
           <div class="course-code">Applied Learning Course</div>
-          <div class="course-name">I have attended or plan to attend an applied learning course, such as: Design-Build-Test, Senior Design, Vertically Integrated Projects</div>
+          <div class="course-name">I have attended or plan to attend an applied learning course, such as: Design-Build-Test, Senior Design, Vertically Integrated Projects. Credits awarded depend on the course (0–3 credits per course, up to 3 courses).</div>
         </div>
-        <div class="course-credits-badge">3 credits</div>
+        <div class="course-credits-badge" id="applied-credits-badge">0–3 credits</div>
       </label>
-      <label class="course-row" data-credits="3" data-course-code="PRACTICAL-CLUB">
-        <input class="course-radio" type="radio" name="practical-choice" data-credits="3" data-na="false" />
+      <!-- Applied Learning sub-section (visible when Option 2 is checked) -->
+      <div class="applied-learning-section" id="applied-learning-section" style="display:none">
+        <div id="applied-courses-container"></div>
+        <div class="applied-section-footer">
+          <button type="button" id="btn-add-applied-course" class="btn-add-applied-course">+ Add Course</button>
+          <div class="applied-credits-total">
+            <span>Applied subtotal:</span>
+            <span class="subtotal-val" id="applied-subtotal">0 credits</span>
+          </div>
+        </div>
+      </div>
+      <!-- Option 3: Student Club / Competition -->
+      <label class="course-row na-option" data-credits="0" data-course-code="PRACTICAL-CLUB">
+        <input class="course-check practical-check" type="checkbox" id="practical-club" data-option="club" data-credits="0" />
         <div>
           <div class="course-code">Student Club / Competition</div>
-          <div class="course-name">I have participated or plan to participate in an aerospace-related student club or collegiate competition</div>
+          <div class="course-name">I have participated or plan to participate in an aerospace-related student club or collegiate competition (0 credits toward certificate — please add an additional course from your primary or secondary track)</div>
         </div>
-        <div class="course-credits-badge">3 credits</div>
+        <div class="course-credits-badge">0 credits</div>
       </label>
     </div>
-    <div class="na-warning" id="na-warning">
-      <i class="bi bi-info-circle me-1"></i>
-      Co-op/internship experience provides 0 credits toward the certificate — select an additional 3 credit hours from your Primary or Secondary Track above to meet the 16-credit minimum.
-    </div>
+    <div class="na-warning" id="na-warning"></div>
   </div>
 
   <!-- Action Row -->
@@ -1397,7 +1495,12 @@ const state = {
   seminar:   { credits: 0, courses: [] },
   primary:   { trackId: null, subTrackId: null, credits: 0, courses: [] },
   secondary: { trackId: null, subTrackId: null, credits: 0, courses: [] },
-  practical: { credits: 0, isNA: false, selected: false }
+  practical: {
+    credits: 0,
+    selected: false,
+    checkedOptions: [],              // 'coop', 'applied', 'club'
+    appliedCourses: [{ name: '', credits: 0 }]  // one empty row to start
+  }
 };
 
 /* ══════════════════════════════════════════════════════════════
@@ -1684,20 +1787,84 @@ function updateCard(cat) {
   });
 }
 
-function updatePracticalCard() {
-  const s = state.practical;
-  const card = document.getElementById('card-practical');
-  const tallyEl  = document.getElementById('tally-practical');
-  const tSep     = document.getElementById('tally-practical-sep');
-  const tTarget  = document.getElementById('tally-practical-target');
-  const bar      = document.getElementById('bar-practical');
-  const statusEl = document.getElementById('status-practical');
-  const naNote   = document.getElementById('practical-na-note');
-  const naWarning= document.getElementById('na-warning');
+/* ══════════════════════════════════════════════════════════════
+   PRACTICAL HELPERS
+══════════════════════════════════════════════════════════════ */
+function computePracticalCredits() {
+  if (!state.practical.checkedOptions.includes('applied')) return 0;
+  return state.practical.appliedCourses.reduce((sum, c) => sum + c.credits, 0);
+}
 
-  card.classList.remove('status-green','status-yellow','na-mode');
+function updateAppliedSubtotal() {
+  const total = state.practical.appliedCourses.reduce((sum, c) => sum + c.credits, 0);
+  const el = document.getElementById('applied-subtotal');
+  if (el) el.textContent = total + ' credit' + (total !== 1 ? 's' : '');
+  const badge = document.getElementById('applied-credits-badge');
+  if (badge) {
+    badge.textContent = state.practical.checkedOptions.includes('applied')
+      ? total + ' cr'
+      : '0\u20133 credits';
+  }
+}
+
+function renderAppliedCourses() {
+  const container = document.getElementById('applied-courses-container');
+  container.innerHTML = '';
+  state.practical.appliedCourses.forEach((course, i) => {
+    const showRemove = state.practical.appliedCourses.length > 1;
+    const entry = document.createElement('div');
+    entry.className = 'applied-course-entry';
+    entry.innerHTML = `
+      <input type="text" class="applied-course-name"
+        placeholder="Course name (e.g. Senior Design)"
+        value="${course.name.replace(/"/g,'&quot;')}" data-index="${i}" />
+      <select class="applied-course-credits" data-index="${i}">
+        <option value="0"${course.credits===0?' selected':''}>0 cr</option>
+        <option value="1"${course.credits===1?' selected':''}>1 cr</option>
+        <option value="2"${course.credits===2?' selected':''}>2 cr</option>
+        <option value="3"${course.credits===3?' selected':''}>3 cr</option>
+      </select>
+      <button type="button" class="btn-remove-applied" data-index="${i}"
+        style="visibility:${showRemove?'visible':'hidden'}">&#215;</button>`;
+    entry.querySelector('.applied-course-name').addEventListener('input', function () {
+      state.practical.appliedCourses[+this.dataset.index].name = this.value;
+    });
+    entry.querySelector('.applied-course-credits').addEventListener('change', function () {
+      state.practical.appliedCourses[+this.dataset.index].credits = +this.value;
+      state.practical.credits = computePracticalCredits();
+      updateAppliedSubtotal();
+      updatePracticalCard();
+      updateTotal();
+    });
+    entry.querySelector('.btn-remove-applied').addEventListener('click', function () {
+      state.practical.appliedCourses.splice(+this.dataset.index, 1);
+      state.practical.credits = computePracticalCredits();
+      renderAppliedCourses();
+      updatePracticalCard();
+      updateTotal();
+    });
+    container.appendChild(entry);
+  });
+  const addBtn = document.getElementById('btn-add-applied-course');
+  if (addBtn) addBtn.disabled = state.practical.appliedCourses.length >= 3;
+  updateAppliedSubtotal();
+}
+
+function updatePracticalCard() {
+  const s         = state.practical;
+  const card      = document.getElementById('card-practical');
+  const tallyEl   = document.getElementById('tally-practical');
+  const tSep      = document.getElementById('tally-practical-sep');
+  const tTarget   = document.getElementById('tally-practical-target');
+  const bar       = document.getElementById('bar-practical');
+  const statusEl  = document.getElementById('status-practical');
+  const naNote    = document.getElementById('practical-na-note');
+  const naWarning = document.getElementById('na-warning');
+
+  card.classList.remove('status-green', 'status-yellow', 'na-mode');
   naNote.style.display = 'none';
   naWarning.classList.remove('visible');
+  naWarning.innerHTML = '';
 
   if (!s.selected) {
     tallyEl.textContent = '—';
@@ -1710,21 +1877,36 @@ function updatePracticalCard() {
 
   tSep.style.visibility = 'visible';
   tTarget.style.visibility = 'visible';
+  tTarget.textContent = '3 cr';
 
-  if (s.isNA) {
-    tallyEl.textContent = '0';
-    tTarget.textContent = '0 cr';
-    bar.style.width = '0%'; bar.className = 'tracker-bar';
-    statusEl.textContent = '✓ Confirmed — add 3 cr above';
-    card.classList.add('status-green');
-    naNote.style.display = 'block';
-    naWarning.classList.add('visible');
-  } else {
-    tallyEl.textContent = '3';
-    tTarget.textContent = '3 cr';
+  const cr = s.credits;
+  tallyEl.textContent = cr;
+
+  if (cr >= 3) {
     bar.style.width = '100%'; bar.className = 'tracker-bar green';
     statusEl.textContent = '✓ Practical confirmed';
     card.classList.add('status-green');
+  } else {
+    const needed = 3 - cr;
+    bar.style.width = (cr / 3 * 100) + '%';
+    bar.className = 'tracker-bar' + (cr > 0 ? ' yellow' : '');
+    statusEl.textContent = '✓ Confirmed — add ' + needed + ' cr above';
+    card.classList.add('status-green');
+    naNote.style.display = 'block';
+    naNote.innerHTML = 'Select ' + needed + ' additional credit' + (needed !== 1 ? 's' : '') +
+                       '<br>from Primary or Secondary above.';
+    // Build warning message listing all checked options
+    const labels = [];
+    if (s.checkedOptions.includes('coop'))    labels.push('Co-op/Internship');
+    if (s.checkedOptions.includes('applied')) labels.push('Applied Learning');
+    if (s.checkedOptions.includes('club'))    labels.push('Student Club/Competition');
+    const optText = labels.join(' and ');
+    naWarning.innerHTML = '<i class="bi bi-info-circle me-1"></i>' +
+      optText + ' contributes ' + cr + ' credit' + (cr !== 1 ? 's' : '') +
+      ' toward the certificate \u2014 select an additional ' + needed +
+      ' credit hour' + (needed !== 1 ? 's' : '') +
+      ' from your Primary or Secondary Track above to meet the 16-credit minimum.';
+    naWarning.classList.add('visible');
   }
 }
 
@@ -1735,15 +1917,19 @@ function isAllMet() {
   if (!state.secondary.trackId)    return false;
   if (state.secondary.credits < 3) return false;
   if (!state.practical.selected)   return false;
-  if (state.practical.isNA && state.primary.credits + state.secondary.credits < 15) return false;
-  const total = state.seminar.credits + state.primary.credits + state.secondary.credits +
-                (state.practical.isNA ? 0 : state.practical.credits);
+  const practicalCr = state.practical.credits;
+  // If practical contributes < 3 cr, track credits must compensate
+  if (practicalCr < 3) {
+    const tracksNeeded = 15 - practicalCr;
+    if (state.primary.credits + state.secondary.credits < tracksNeeded) return false;
+  }
+  const total = state.seminar.credits + state.primary.credits + state.secondary.credits + practicalCr;
   return total >= 16;
 }
 
 function updateTotal() {
   const total = state.seminar.credits + state.primary.credits + state.secondary.credits +
-                (state.practical.isNA ? 0 : state.practical.credits);
+                state.practical.credits;
   const pct    = Math.min(total / 16, 1);
   const allMet = isAllMet();
 
@@ -1794,18 +1980,50 @@ document.querySelector('#seminar-course-list .course-check').addEventListener('c
 });
 
 /* ══════════════════════════════════════════════════════════════
-   PRACTICAL RADIOS
+   PRACTICAL CHECKBOXES
 ══════════════════════════════════════════════════════════════ */
-document.querySelectorAll('input[name="practical-choice"]').forEach(radio => {
-  radio.addEventListener('change', function () {
-    document.querySelectorAll('#practical-course-list .course-row').forEach(r => r.classList.remove('selected'));
-    this.closest('.course-row').classList.add('selected');
-    state.practical.credits  = parseInt(this.dataset.credits, 10);
-    state.practical.isNA     = this.dataset.na === 'true';
-    state.practical.selected = true;
+document.querySelectorAll('.practical-check').forEach(chk => {
+  chk.addEventListener('change', function () {
+    const option = this.dataset.option;
+    const row = this.closest('.course-row');
+
+    if (this.checked) {
+      if (!state.practical.checkedOptions.includes(option)) {
+        state.practical.checkedOptions.push(option);
+      }
+      row.classList.add('selected');
+    } else {
+      state.practical.checkedOptions = state.practical.checkedOptions.filter(o => o !== option);
+      row.classList.remove('selected');
+      // Reset applied courses when unchecking Option 2
+      if (option === 'applied') {
+        state.practical.appliedCourses = [{ name: '', credits: 0 }];
+      }
+    }
+
+    state.practical.selected = state.practical.checkedOptions.length > 0;
+    state.practical.credits  = computePracticalCredits();
+
+    // Show / hide applied learning sub-section
+    const appliedSection = document.getElementById('applied-learning-section');
+    if (state.practical.checkedOptions.includes('applied')) {
+      appliedSection.style.display = 'block';
+      renderAppliedCourses();
+    } else {
+      appliedSection.style.display = 'none';
+      updateAppliedSubtotal();   // resets badge to "0–3 credits"
+    }
+
     updatePracticalCard();
     updateTotal();
   });
+});
+
+document.getElementById('btn-add-applied-course').addEventListener('click', function () {
+  if (state.practical.appliedCourses.length < 3) {
+    state.practical.appliedCourses.push({ name: '', credits: 0 });
+    renderAppliedCourses();
+  }
 });
 
 /* ══════════════════════════════════════════════════════════════
@@ -1829,10 +2047,16 @@ document.getElementById('btn-reset').addEventListener('click', () => {
   state.seminar.credits = 0; state.seminar.courses = [];
   updateCard('seminar');
 
-  document.querySelectorAll('input[name="practical-choice"]').forEach(r => r.checked = false);
+  document.querySelectorAll('.practical-check').forEach(chk => { chk.checked = false; });
   document.querySelectorAll('#practical-course-list .course-row').forEach(r => r.classList.remove('selected'));
-  state.practical = { credits: 0, isNA: false, selected: false };
-  document.getElementById('na-warning').classList.remove('visible');
+  state.practical = {
+    credits: 0, selected: false, checkedOptions: [],
+    appliedCourses: [{ name: '', credits: 0 }]
+  };
+  document.getElementById('applied-learning-section').style.display = 'none';
+  const naW = document.getElementById('na-warning');
+  naW.classList.remove('visible'); naW.innerHTML = '';
+  updateAppliedSubtotal();
   updatePracticalCard();
   updateTotal();
 });
@@ -1887,11 +2111,28 @@ document.getElementById('btn-generate').addEventListener('click', () => {
   document.getElementById('ps-secondary-body').innerHTML = buildCourseRows(state.secondary.courses);
 
   /* Practical */
-  const practicalCr = state.practical.isNA ? 0 : 3;
+  const practicalCr = state.practical.credits;
   document.getElementById('ps-practical-credits').textContent = `${practicalCr} cr`;
-  document.getElementById('ps-practical-status').textContent = state.practical.isNA
-    ? 'Co-op / Internship — 0 credits toward certificate. An additional 3 credits must be selected from the Primary or Secondary track.'
-    : 'Practical aerospace experience confirmed (3 credits toward certificate total).';
+  const pOpts = state.practical.checkedOptions;
+  const psLines = [];
+  if (pOpts.includes('coop'))
+    psLines.push('&#10003; Co-op / Internship &mdash; 0 credits toward certificate');
+  if (pOpts.includes('applied')) {
+    const appliedTotal = state.practical.appliedCourses.reduce((s, c) => s + c.credits, 0);
+    psLines.push('&#10003; Applied Learning Course &mdash; ' + appliedTotal + ' cr toward certificate');
+    state.practical.appliedCourses.forEach(c => {
+      if (c.name || c.credits > 0)
+        psLines.push('&nbsp;&nbsp;&bull;&nbsp;' + (c.name || '(unnamed course)') + ': ' + c.credits + ' cr');
+    });
+  }
+  if (pOpts.includes('club'))
+    psLines.push('&#10003; Student Club / Competition &mdash; 0 credits toward certificate');
+  if (practicalCr < 3) {
+    const need = 3 - practicalCr;
+    psLines.push('<em style="color:#7a5c00">Note: ' + need + ' additional credit hour' +
+                 (need !== 1 ? 's' : '') + ' must be selected from the Primary or Secondary track.</em>');
+  }
+  document.getElementById('ps-practical-status').innerHTML = psLines.join('<br>');
 
   /* Total */
   const total = state.seminar.credits + state.primary.credits + state.secondary.credits + practicalCr;
