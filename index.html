@@ -7,18 +7,32 @@
 
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
-  <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,300;0,400;0,600;1,300&family=Space+Mono:wght@400;700&family=Barlow:ital,wght@0,300;0,400;0,600;0,700;1,300&family=Barlow+Condensed:wght@400;600;700&display=swap" rel="stylesheet" />
+  <!--
+    FONTS: Acumin Pro, Acumin Pro Condensed, and Source Serif Pro are Purdue-licensed
+    Adobe fonts. Load them via your institution's Adobe Fonts / Typekit embed code
+    on the host page before this component renders. PC substitutes (Franklin Gothic
+    Medium, Georgia) are included in every font-family stack as automatic fallbacks.
+  -->
 
   <style>
+
+    /* wrap9 adjustments */
+    .block .body-copy {
+     padding: 0;
+    }
+    .app-outer {
+      padding: 0;
+    }
+
     /* ─── Purdue Brand Tokens ────────────────────────────────── */
     :root {
       /* Purdue official palette */
       --purdue-gold:        #CFB991;   /* Boilermaker Gold */
-      --purdue-gold-aged:   #8E6F3E;   /* Aged Gold        */
+      --purdue-gold-aged:   #7B5E30;   /* Aged Gold — darkened for AA contrast */
       --purdue-gold-rush:   #DAAA00;   /* Rush Gold        */
       --purdue-gold-field:  #DDB945;   /* Field Gold       */
       --purdue-gold-dust:   #EBD99F;   /* Dust Gold        */
-      --purdue-gold-dim:    #8E6F3E;
+      --purdue-gold-dim:    #7B5E30;
       --purdue-gold-glow:   rgba(207,185,145,0.4);
       --steel-gray:         #555960;   /* Purdue Steel Gray   */
       --cool-gray:          #6F727B;   /* Purdue Cool Gray    */
@@ -35,7 +49,7 @@
 
       /* Text */
       --text-primary:   #1a1a1a;
-      --text-muted:     #6F727B;   /* Cool Gray */
+      --text-muted:     #65686F;   /* Cool Gray — darkened for AA contrast */
 
       /* Kept as legacy aliases so JS-referenced CSS still resolves */
       --space-black:    #000000;
@@ -44,7 +58,8 @@
       /* Status */
       --status-inactive: #9D9795;
       --status-yellow:   #DAAA00;  /* Rush Gold */
-      --status-green:    #27ae60;
+      --status-green:      #27ae60;  /* decorative (bars, borders, backgrounds) */
+      --status-green-text: #1e7e34;  /* text use only — AA compliant (~5:1 on white) */
       --status-red:      #c0392b;
 
       --tracker-width: 280px;
@@ -52,26 +67,39 @@
 
     *, *::before, *::after { box-sizing: border-box; }
     html { scroll-behavior: smooth; }
-    body {
+    /* body {
       background-color: var(--bg-page);
       color: var(--text-primary);
-      font-family: 'Barlow', sans-serif;
+      font-family: 'Acumin Pro', 'Franklin Gothic Medium', sans-serif;
       font-weight: 300;
       min-height: 100vh;
       overflow-x: hidden;
-    }
+    } */
 
     /* ─── Star Canvas — hidden on light theme ─────────────────── */
     #star-canvas { display: none; }
 
     /* ─── Layout ─────────────────────────────────────────────── */
-    .page-wrapper {
-      position: relative;
-      z-index: 1;
-      padding-right: calc(var(--tracker-width) + 24px);
+    .app-outer {
+      display: flex;
+      align-items: flex-start;
+      gap: 24px;
       max-width: 1280px;
       margin: 0 auto;
-      padding-left: 32px;
+      padding: 0 32px;
+    }
+
+    .page-wrapper {
+      flex: 1;
+      min-width: 0;       /* prevents flex child from overflowing */
+      position: relative;
+      z-index: 1;
+    }
+
+    .tracker-column {
+      flex-shrink: 0;
+      width: var(--tracker-width);
+      align-self: stretch;   /* must be as tall as the form column so sticky has room to scroll */
     }
 
     /* ─── Page Header — Purdue brand treatment ───────────────── */
@@ -99,7 +127,7 @@
     }
 
     .overline {
-      font-family: 'Space Mono', monospace;
+      font-family: 'Acumin Pro', 'Franklin Gothic Medium', sans-serif;
       font-size: 0.7rem;
       letter-spacing: 0.25em;
       text-transform: uppercase;
@@ -117,7 +145,7 @@
     }
 
     .page-title {
-      font-family: 'Barlow Condensed', sans-serif;
+      font-family: 'Acumin Pro Condensed', 'Franklin Gothic Medium', sans-serif;
       font-size: clamp(2.2rem, 4vw, 3.6rem);
       font-weight: 700;
       line-height: 1.05;
@@ -136,8 +164,8 @@
 
     .requirement-pills { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 24px; }
     .req-pill {
-      font-family: 'Space Mono', monospace;
-      font-size: 0.68rem;
+      font-family: 'Acumin Pro', 'Franklin Gothic Medium', sans-serif;
+      font-size: 0.75rem;
       letter-spacing: 0.05em;
       padding: 5px 12px;
       border: 1px solid var(--border-soft);
@@ -151,13 +179,13 @@
     .course-section { margin-bottom: 56px; }
     .section-header { display: flex; align-items: baseline; gap: 14px; margin-bottom: 6px; }
     .section-index {
-      font-family: 'Space Mono', monospace;
-      font-size: 0.65rem;
+      font-family: 'Acumin Pro', 'Franklin Gothic Medium', sans-serif;
+      font-size: 0.75rem;
       color: var(--purdue-gold-aged);
       letter-spacing: 0.1em;
     }
     .section-title {
-      font-family: 'Barlow Condensed', sans-serif;
+      font-family: 'Acumin Pro Condensed', 'Franklin Gothic Medium', sans-serif;
       font-size: 1.3rem;
       font-weight: 600;
       letter-spacing: 0.04em;
@@ -167,8 +195,8 @@
     }
     .section-rule { border: none; border-top: 1px solid var(--border-rule); margin: 10px 0 20px; }
     .section-meta {
-      font-family: 'Space Mono', monospace;
-      font-size: 0.7rem;
+      font-family: 'Acumin Pro', 'Franklin Gothic Medium', sans-serif;
+      font-size: 0.75rem;
       color: var(--text-muted);
       margin-bottom: 24px;
       letter-spacing: 0.03em;
@@ -178,8 +206,8 @@
 
     /* ─── Step Label ─────────────────────────────────────────── */
     .step-label {
-      font-family: 'Space Mono', monospace;
-      font-size: 0.6rem;
+      font-family: 'Acumin Pro', 'Franklin Gothic Medium', sans-serif;
+      font-size: 0.75rem;
       letter-spacing: 0.18em;
       text-transform: uppercase;
       color: var(--purdue-gold-aged);
@@ -226,6 +254,10 @@
       box-shadow: 0 2px 8px rgba(142,111,62,0.15);
     }
     .track-card.disabled { opacity: 0.35; cursor: not-allowed; pointer-events: none; }
+    .track-card:focus-visible {
+      outline: 2px solid var(--purdue-gold-aged);
+      outline-offset: 2px;
+    }
 
     .track-radio-dot {
       width: 16px; height: 16px;
@@ -247,7 +279,7 @@
       background: var(--purdue-gold-aged);
     }
     .track-card-name {
-      font-family: 'Barlow Condensed', sans-serif;
+      font-family: 'Acumin Pro Condensed', 'Franklin Gothic Medium', sans-serif;
       font-size: 1rem;
       font-weight: 600;
       letter-spacing: 0.03em;
@@ -256,8 +288,8 @@
     }
     .track-card.selected .track-card-name { color: var(--purdue-gold-aged); }
     .track-card-note {
-      font-family: 'Space Mono', monospace;
-      font-size: 0.55rem;
+      font-family: 'Acumin Pro', 'Franklin Gothic Medium', sans-serif;
+      font-size: 0.75rem;
       color: var(--text-muted);
       letter-spacing: 0.04em;
       margin-top: 5px;
@@ -282,8 +314,8 @@
       border: 1px dashed var(--border-rule);
       border-radius: 3px;
       color: var(--text-muted);
-      font-family: 'Space Mono', monospace;
-      font-size: 0.65rem;
+      font-family: 'Acumin Pro', 'Franklin Gothic Medium', sans-serif;
+      font-size: 0.75rem;
       letter-spacing: 0.07em;
       margin-bottom: 20px;
       background: var(--bg-tint);
@@ -298,8 +330,8 @@
       border: 1px dashed var(--border-rule);
       border-radius: 3px;
       color: var(--text-muted);
-      font-family: 'Space Mono', monospace;
-      font-size: 0.65rem;
+      font-family: 'Acumin Pro', 'Franklin Gothic Medium', sans-serif;
+      font-size: 0.75rem;
       letter-spacing: 0.07em;
       background: var(--bg-tint);
     }
@@ -368,7 +400,7 @@
     .course-radio:focus { outline: none; box-shadow: 0 0 0 3px var(--purdue-gold-glow); }
 
     .course-code {
-      font-family: 'Space Mono', monospace;
+      font-family: 'Acumin Pro', 'Franklin Gothic Medium', sans-serif;
       font-size: 0.72rem;
       color: var(--purdue-gold-aged);
       letter-spacing: 0.04em;
@@ -380,8 +412,8 @@
       line-height: 1.3;
     }
     .course-credits-badge {
-      font-family: 'Space Mono', monospace;
-      font-size: 0.7rem;
+      font-family: 'Acumin Pro', 'Franklin Gothic Medium', sans-serif;
+      font-size: 0.75rem;
       padding: 3px 8px;
       border: 1px solid var(--border-rule);
       border-radius: 2px;
@@ -400,8 +432,8 @@
 
     /* ─── Practical note ─────────────────────────────────────── */
     .practical-note {
-      font-family: 'Space Mono', monospace;
-      font-size: 0.65rem;
+      font-family: 'Acumin Pro', 'Franklin Gothic Medium', sans-serif;
+      font-size: 0.75rem;
       color: var(--text-muted);
       line-height: 1.7;
       letter-spacing: 0.03em;
@@ -414,8 +446,8 @@
     }
     .practical-note .highlight { color: var(--purdue-gold-aged); font-weight: 600; }
     .na-warning {
-      font-family: 'Space Mono', monospace;
-      font-size: 0.65rem;
+      font-family: 'Acumin Pro', 'Franklin Gothic Medium', sans-serif;
+      font-size: 0.75rem;
       color: #7a5c00;
       letter-spacing: 0.04em;
       line-height: 1.6;
@@ -446,7 +478,7 @@
       margin-bottom: 8px;
     }
     .applied-course-entry input[type="text"] {
-      font-family: 'Barlow', sans-serif;
+      font-family: 'Acumin Pro', 'Franklin Gothic Medium', sans-serif;
       font-size: 0.875rem;
       font-weight: 300;
       padding: 6px 10px;
@@ -464,7 +496,7 @@
       box-shadow: 0 0 0 3px var(--purdue-gold-glow);
     }
     .applied-course-entry select {
-      font-family: 'Space Mono', monospace;
+      font-family: 'Acumin Pro', 'Franklin Gothic Medium', sans-serif;
       font-size: 0.7rem;
       padding: 6px 6px;
       border: 1px solid var(--border-soft);
@@ -495,8 +527,8 @@
       flex-wrap: wrap; gap: 8px; margin-top: 4px;
     }
     .btn-add-applied-course {
-      font-family: 'Space Mono', monospace;
-      font-size: 0.62rem; letter-spacing: 0.06em;
+      font-family: 'Acumin Pro', 'Franklin Gothic Medium', sans-serif;
+      font-size: 0.75rem; letter-spacing: 0.06em;
       padding: 5px 10px;
       background: transparent; color: var(--purdue-gold-aged);
       border: 1px dashed var(--purdue-gold-aged);
@@ -508,30 +540,30 @@
     }
     .btn-add-applied-course:disabled { opacity: 0.35; cursor: not-allowed; }
     .applied-credits-total {
-      font-family: 'Space Mono', monospace;
-      font-size: 0.62rem; letter-spacing: 0.04em;
+      font-family: 'Acumin Pro', 'Franklin Gothic Medium', sans-serif;
+      font-size: 0.75rem; letter-spacing: 0.04em;
       color: var(--text-muted); display: flex; gap: 5px; align-items: center;
     }
     .applied-credits-total .subtotal-val { color: var(--purdue-gold-aged); font-weight: 600; }
 
-    /* ─── Floating Tracker ───────────────────────────────────── */
+    /* ─── Sticky Tracker ────────────────────────────────────── */
     #tracker {
-      position: fixed;
-      top: 32px; right: 24px;
-      width: var(--tracker-width);
-      z-index: 1000;
+      position: sticky;
+      top: 32px;
+      width: 100%;
+      z-index: 100;
       display: flex;
       flex-direction: column;
       gap: 8px;
-      max-height: calc(100vh - 48px);
+      max-height: calc(100vh - 64px);
       overflow-y: auto;
       scrollbar-width: none;
     }
     #tracker::-webkit-scrollbar { display: none; }
 
     .tracker-header {
-      font-family: 'Space Mono', monospace;
-      font-size: 0.6rem;
+      font-family: 'Acumin Pro', 'Franklin Gothic Medium', sans-serif;
+      font-size: 0.75rem;
       letter-spacing: 0.2em;
       text-transform: uppercase;
       color: var(--purdue-gold-aged);
@@ -575,8 +607,8 @@
     .tracker-card.na-mode::before { background: var(--steam-gray); }
 
     .tracker-card-label {
-      font-family: 'Space Mono', monospace;
-      font-size: 0.6rem;
+      font-family: 'Acumin Pro', 'Franklin Gothic Medium', sans-serif;
+      font-size: 0.75rem;
       letter-spacing: 0.12em;
       text-transform: uppercase;
       color: var(--text-muted);
@@ -585,8 +617,8 @@
     }
     .tracker-track-name {
       display: block;
-      font-family: 'Space Mono', monospace;
-      font-size: 0.55rem;
+      font-family: 'Acumin Pro', 'Franklin Gothic Medium', sans-serif;
+      font-size: 0.75rem;
       color: var(--purdue-gold-aged);
       letter-spacing: 0.04em;
       text-transform: none;
@@ -597,16 +629,16 @@
 
     .tracker-tally { display: flex; align-items: baseline; gap: 4px; margin-bottom: 10px; }
     .tally-current {
-      font-family: 'Barlow Condensed', sans-serif;
+      font-family: 'Acumin Pro Condensed', 'Franklin Gothic Medium', sans-serif;
       font-size: 2rem;
       font-weight: 700;
       color: var(--text-primary);
       line-height: 1;
       transition: color 0.3s;
     }
-    .tracker-card.status-green .tally-current { color: var(--status-green); }
+    .tracker-card.status-green .tally-current { color: var(--status-green-text); }
     .tally-sep, .tally-target {
-      font-family: 'Space Mono', monospace;
+      font-family: 'Acumin Pro', 'Franklin Gothic Medium', sans-serif;
       font-size: 0.75rem;
       color: var(--text-muted);
     }
@@ -629,17 +661,17 @@
     .tracker-bar.green  { background: var(--status-green); }
 
     .tracker-status-text {
-      font-family: 'Space Mono', monospace;
-      font-size: 0.58rem;
+      font-family: 'Acumin Pro', 'Franklin Gothic Medium', sans-serif;
+      font-size: 0.75rem;
       color: var(--text-muted);
       letter-spacing: 0.06em;
     }
-    .tracker-card.status-green .tracker-status-text { color: var(--status-green); }
+    .tracker-card.status-green .tracker-status-text { color: var(--status-green-text); }
 
     .tracker-na-note {
       display: none;
-      font-family: 'Space Mono', monospace;
-      font-size: 0.56rem;
+      font-family: 'Acumin Pro', 'Franklin Gothic Medium', sans-serif;
+      font-size: 0.75rem;
       color: var(--text-muted);
       letter-spacing: 0.04em;
       line-height: 1.6;
@@ -659,13 +691,13 @@
       transform: scale(0.5);
       transition: opacity 0.3s, transform 0.35s cubic-bezier(0.34,1.56,0.64,1);
     }
-    .complete-icon i { font-size: 0.6rem; color: white; }
+    .complete-icon i { font-size: 0.75rem; color: white; }
     .tracker-card.status-green .complete-icon { opacity: 1; transform: scale(1); }
 
     .tracker-courses { margin-top: 8px; display: flex; flex-direction: column; gap: 3px; }
     .tracker-course-item {
-      font-family: 'Space Mono', monospace;
-      font-size: 0.56rem;
+      font-family: 'Acumin Pro', 'Franklin Gothic Medium', sans-serif;
+      font-size: 0.75rem;
       color: var(--text-muted);
       letter-spacing: 0.04em;
       display: flex;
@@ -693,7 +725,7 @@
     .action-row { margin: 48px 0 64px; display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
 
     .btn-generate {
-      font-family: 'Barlow Condensed', sans-serif;
+      font-family: 'Acumin Pro Condensed', 'Franklin Gothic Medium', sans-serif;
       font-size: 1rem; font-weight: 600;
       letter-spacing: 0.08em; text-transform: uppercase;
       padding: 12px 28px;
@@ -710,8 +742,8 @@
     .btn-generate:disabled { opacity: 0.35; cursor: not-allowed; }
 
     .btn-reset {
-      font-family: 'Space Mono', monospace;
-      font-size: 0.7rem; letter-spacing: 0.05em;
+      font-family: 'Acumin Pro', 'Franklin Gothic Medium', sans-serif;
+      font-size: 0.75rem; letter-spacing: 0.05em;
       padding: 12px 18px;
       background: transparent;
       color: var(--text-muted);
@@ -723,25 +755,57 @@
 
     /* ─── Responsive ─────────────────────────────────────────── */
     @media (max-width: 992px) {
-      .page-wrapper { padding-right: 32px; }
+      .app-outer {
+        flex-direction: column;
+        /* padding: 0 16px; */
+        gap: 0;
+      }
+      /* Tracker column moves above the main content */
+      .tracker-column {
+        width: 100%;
+        order: -1;
+      }
       #tracker {
-        position: fixed; bottom: 0; top: auto; right: 0; left: 0;
-        width: 100%; max-height: 40vh;
-        flex-direction: row; flex-wrap: nowrap;
+        position: static;
+        flex-direction: row;
+        flex-wrap: nowrap;
         overflow-x: auto; overflow-y: hidden;
-        gap: 6px; padding: 10px 16px;
-        background: rgba(255,255,255,0.97);
-        backdrop-filter: blur(12px);
-        border-top: 2px solid var(--purdue-gold);
-        box-shadow: 0 -4px 20px rgba(0,0,0,0.1);
+        gap: 6px;
+        padding: 10px 0 14px;
+        max-height: none;
+        border-bottom: 2px solid var(--purdue-gold);
+        margin-bottom: 24px;
         scrollbar-width: none;
       }
       #tracker::-webkit-scrollbar { display: none; }
       .tracker-header { display: none; }
       .tracker-card { min-width: 150px; flex-shrink: 0; }
       .tracker-courses, .tracker-na-note { display: none !important; }
-      body { padding-bottom: 200px; }
       .track-options { grid-template-columns: 1fr; }
+    }
+
+    /* ─── Course row — 2-column layout on small screens ─────── */
+    @media (max-width: 640px) {
+      .course-row {
+        grid-template-columns: 36px 1fr;
+        align-items: start;         /* checkbox aligns to top of the taller cell */
+        row-gap: 0;
+      }
+
+      /* Checkbox nudge — keep it visually centred with the first text line */
+      .course-row > input[type="checkbox"],
+      .course-row > input[type="radio"] {
+        margin-top: 3px;
+      }
+
+      /* Badge drops to a second row inside column 2 */
+      .course-credits-badge {
+        grid-column: 2;
+        justify-self: start;
+        margin-top: 5px;
+        /* slightly more compact on mobile */
+        padding: 2px 8px;
+      }
     }
 
     /* ════════════════════════════════════════════════════════════
@@ -752,8 +816,7 @@
     @media print {
       /* Hide the interactive UI */
       #star-canvas,
-      #tracker,
-      .page-wrapper { display: none !important; }
+      .app-outer { display: none !important; }
 
       /* Show the print layout */
       #print-summary { display: block !important; }
@@ -761,7 +824,7 @@
       body {
         background: #ffffff !important;
         color: #000000 !important;
-        font-family: 'Source Serif 4', Georgia, serif !important;
+        font-family: 'Source Serif Pro', Georgia, serif !important;
         font-size: 10pt;
         margin: 0;
         padding: 0;
@@ -787,8 +850,8 @@
       }
 
       .ps-institution {
-        font-family: 'Barlow Condensed', Impact, 'Franklin Gothic Medium', sans-serif;
-        font-size: 7pt;
+        font-family: 'Acumin Pro Condensed', 'Franklin Gothic Medium', sans-serif;
+        font-size: 8pt;
         letter-spacing: 0.28em;
         text-transform: uppercase;
         color: #8E6F3E;
@@ -796,7 +859,7 @@
       }
 
       .ps-program {
-        font-family: 'Barlow Condensed', Impact, sans-serif;
+        font-family: 'Acumin Pro Condensed', 'Franklin Gothic Medium', sans-serif;
         font-size: 22pt;
         font-weight: 700;
         letter-spacing: -0.01em;
@@ -814,7 +877,7 @@
       }
 
       .ps-doc-type {
-        font-family: 'Barlow Condensed', sans-serif;
+        font-family: 'Acumin Pro Condensed', 'Franklin Gothic Medium', sans-serif;
         font-size: 11pt;
         font-weight: 600;
         letter-spacing: 0.06em;
@@ -823,8 +886,8 @@
       }
 
       .ps-date {
-        font-family: 'Space Mono', monospace;
-        font-size: 7.5pt;
+        font-family: 'Acumin Pro', 'Franklin Gothic Medium', sans-serif;
+        font-size: 8pt;
         color: #9D9795;
         letter-spacing: 0.04em;
       }
@@ -836,7 +899,7 @@
       }
 
       .ps-section-title {
-        font-family: 'Barlow Condensed', Impact, sans-serif;
+        font-family: 'Acumin Pro Condensed', 'Franklin Gothic Medium', sans-serif;
         font-size: 10pt;
         font-weight: 700;
         text-transform: uppercase;
@@ -851,8 +914,8 @@
       }
 
       .ps-section-credits {
-        font-family: 'Space Mono', monospace;
-        font-size: 7.5pt;
+        font-family: 'Acumin Pro', 'Franklin Gothic Medium', sans-serif;
+        font-size: 8pt;
         color: #8E6F3E;
         letter-spacing: 0.05em;
         font-weight: normal;
@@ -860,7 +923,7 @@
       }
 
       .ps-track-name {
-        font-family: 'Barlow', sans-serif;
+        font-family: 'Acumin Pro', 'Franklin Gothic Medium', sans-serif;
         font-size: 8.5pt;
         font-weight: 400;
         color: #555960;
@@ -881,8 +944,8 @@
       }
       .ps-table th {
         text-align: left;
-        font-family: 'Space Mono', monospace;
-        font-size: 6.5pt;
+        font-family: 'Acumin Pro', 'Franklin Gothic Medium', sans-serif;
+        font-size: 8pt;
         font-weight: normal;
         letter-spacing: 0.1em;
         text-transform: uppercase;
@@ -893,12 +956,12 @@
         padding: 4pt 6pt;
         border-bottom: 0.5pt solid #f0f0f0;
         color: #000000;
-        font-family: 'Source Serif 4', Georgia, serif;
+        font-family: 'Source Serif Pro', Georgia, serif;
         font-size: 9pt;
       }
       .ps-table td.td-code {
-        font-family: 'Space Mono', monospace;
-        font-size: 7.5pt;
+        font-family: 'Acumin Pro', 'Franklin Gothic Medium', sans-serif;
+        font-size: 8pt;
         color: #8E6F3E;
         white-space: nowrap;
       }
@@ -906,8 +969,8 @@
         text-align: right;
         white-space: nowrap;
         color: #555960;
-        font-family: 'Space Mono', monospace;
-        font-size: 7.5pt;
+        font-family: 'Acumin Pro', 'Franklin Gothic Medium', sans-serif;
+        font-size: 8pt;
       }
 
       /* ── Practical block ── */
@@ -930,7 +993,7 @@
         break-inside: avoid;
       }
       .ps-total-label {
-        font-family: 'Barlow Condensed', sans-serif;
+        font-family: 'Acumin Pro Condensed', 'Franklin Gothic Medium', sans-serif;
         font-size: 11pt;
         font-weight: 700;
         letter-spacing: 0.08em;
@@ -938,14 +1001,14 @@
         color: #000;
       }
       .ps-total-value {
-        font-family: 'Barlow Condensed', sans-serif;
+        font-family: 'Acumin Pro Condensed', 'Franklin Gothic Medium', sans-serif;
         font-size: 16pt;
         font-weight: 700;
         color: #8E6F3E;
       }
       .ps-total-min {
-        font-family: 'Space Mono', monospace;
-        font-size: 7.5pt;
+        font-family: 'Acumin Pro', 'Franklin Gothic Medium', sans-serif;
+        font-size: 8pt;
         color: #9D9795;
         margin-left: 6pt;
       }
@@ -955,8 +1018,8 @@
         margin-top: 28pt;
         padding-top: 8pt;
         border-top: 0.5pt solid #ddd;
-        font-family: 'Space Mono', monospace;
-        font-size: 6.5pt;
+        font-family: 'Acumin Pro', 'Franklin Gothic Medium', sans-serif;
+        font-size: 8pt;
         color: #9D9795;
         letter-spacing: 0.04em;
         display: flex;
@@ -1042,76 +1105,8 @@
 
 <canvas id="star-canvas"></canvas>
 
-<!-- ── FLOATING TRACKER ─────────────────────────────────────── -->
-<div id="tracker">
-  <div class="tracker-header"><span class="dot"></span>Credit Tracker</div>
-
-  <div class="tracker-card" id="card-seminar">
-    <div class="complete-icon"><i class="bi bi-check-lg"></i></div>
-    <div class="tracker-card-label">Space Engineering<br>Seminar</div>
-    <div class="tracker-tally">
-      <span class="tally-current" id="tally-seminar">0</span>
-      <span class="tally-sep">/</span>
-      <span class="tally-target">1 cr</span>
-    </div>
-    <div class="tracker-progress"><div class="tracker-bar" id="bar-seminar"></div></div>
-    <div class="tracker-status-text" id="status-seminar">1 cr required</div>
-    <div class="tracker-courses" id="courses-seminar"></div>
-  </div>
-
-  <div class="tracker-card" id="card-primary">
-    <div class="complete-icon"><i class="bi bi-check-lg"></i></div>
-    <div class="tracker-card-label">Primary Track</div>
-    <span class="tracker-track-name" id="primary-tracker-track">— Not Selected</span>
-    <div class="tracker-tally">
-      <span class="tally-current" id="tally-primary">0</span>
-      <span class="tally-sep">/</span>
-      <span class="tally-target">9+ cr</span>
-    </div>
-    <div class="tracker-progress"><div class="tracker-bar" id="bar-primary"></div></div>
-    <div class="tracker-status-text" id="status-primary">Select a track first</div>
-    <div class="tracker-courses" id="courses-primary"></div>
-  </div>
-
-  <div class="tracker-card" id="card-secondary">
-    <div class="complete-icon"><i class="bi bi-check-lg"></i></div>
-    <div class="tracker-card-label">Secondary Track</div>
-    <span class="tracker-track-name" id="secondary-tracker-track">— Not Selected</span>
-    <div class="tracker-tally">
-      <span class="tally-current" id="tally-secondary">0</span>
-      <span class="tally-sep">/</span>
-      <span class="tally-target">3+ cr</span>
-    </div>
-    <div class="tracker-progress"><div class="tracker-bar" id="bar-secondary"></div></div>
-    <div class="tracker-status-text" id="status-secondary">Select a track first</div>
-    <div class="tracker-courses" id="courses-secondary"></div>
-  </div>
-
-  <div class="tracker-card" id="card-practical">
-    <div class="complete-icon"><i class="bi bi-check-lg"></i></div>
-    <div class="tracker-card-label">Practical Aerospace<br>Experience</div>
-    <div class="tracker-tally">
-      <span class="tally-current" id="tally-practical">—</span>
-      <span class="tally-sep" id="tally-practical-sep" style="visibility:hidden">/</span>
-      <span class="tally-target" id="tally-practical-target" style="visibility:hidden">0–3 cr</span>
-    </div>
-    <div class="tracker-progress"><div class="tracker-bar" id="bar-practical"></div></div>
-    <div class="tracker-status-text" id="status-practical">Select an option below</div>
-    <div class="tracker-na-note" id="practical-na-note">Select 3 additional credits<br>from Primary or Secondary above.</div>
-  </div>
-
-  <div class="tracker-card total-card" id="card-total">
-    <div class="complete-icon"><i class="bi bi-check-lg"></i></div>
-    <div class="tracker-card-label">Total Credits</div>
-    <div class="tracker-tally">
-      <span class="tally-current" id="tally-total">0</span>
-      <span class="tally-sep">/</span>
-      <span class="tally-target">16+ cr</span>
-    </div>
-    <div class="tracker-progress"><div class="tracker-bar" id="bar-total"></div></div>
-    <div class="tracker-status-text" id="status-total">Complete all categories</div>
-  </div>
-</div>
+<!-- ── APP OUTER — contains main content + sticky tracker column ── -->
+<div class="app-outer">
 
 <!-- ── MAIN CONTENT ──────────────────────────────────────────── -->
 <div class="page-wrapper">
@@ -1275,6 +1270,81 @@
   </div>
 
 </div><!-- /page-wrapper -->
+
+<!-- ── TRACKER COLUMN ────────────────────────────────────────── -->
+<div class="tracker-column">
+  <div id="tracker">
+    <div class="tracker-header"><span class="dot"></span>Credit Tracker</div>
+
+    <div class="tracker-card" id="card-seminar">
+      <div class="complete-icon"><i class="bi bi-check-lg"></i></div>
+      <div class="tracker-card-label">Space Engineering<br>Seminar</div>
+      <div class="tracker-tally">
+        <span class="tally-current" id="tally-seminar">0</span>
+        <span class="tally-sep">/</span>
+        <span class="tally-target">1 cr</span>
+      </div>
+      <div class="tracker-progress"><div class="tracker-bar" id="bar-seminar"></div></div>
+      <div class="tracker-status-text" id="status-seminar">1 cr required</div>
+      <div class="tracker-courses" id="courses-seminar"></div>
+    </div>
+
+    <div class="tracker-card" id="card-primary">
+      <div class="complete-icon"><i class="bi bi-check-lg"></i></div>
+      <div class="tracker-card-label">Primary Track</div>
+      <span class="tracker-track-name" id="primary-tracker-track">— Not Selected</span>
+      <div class="tracker-tally">
+        <span class="tally-current" id="tally-primary">0</span>
+        <span class="tally-sep">/</span>
+        <span class="tally-target">9+ cr</span>
+      </div>
+      <div class="tracker-progress"><div class="tracker-bar" id="bar-primary"></div></div>
+      <div class="tracker-status-text" id="status-primary">Select a track first</div>
+      <div class="tracker-courses" id="courses-primary"></div>
+    </div>
+
+    <div class="tracker-card" id="card-secondary">
+      <div class="complete-icon"><i class="bi bi-check-lg"></i></div>
+      <div class="tracker-card-label">Secondary Track</div>
+      <span class="tracker-track-name" id="secondary-tracker-track">— Not Selected</span>
+      <div class="tracker-tally">
+        <span class="tally-current" id="tally-secondary">0</span>
+        <span class="tally-sep">/</span>
+        <span class="tally-target">3+ cr</span>
+      </div>
+      <div class="tracker-progress"><div class="tracker-bar" id="bar-secondary"></div></div>
+      <div class="tracker-status-text" id="status-secondary">Select a track first</div>
+      <div class="tracker-courses" id="courses-secondary"></div>
+    </div>
+
+    <div class="tracker-card" id="card-practical">
+      <div class="complete-icon"><i class="bi bi-check-lg"></i></div>
+      <div class="tracker-card-label">Practical Aerospace<br>Experience</div>
+      <div class="tracker-tally">
+        <span class="tally-current" id="tally-practical">—</span>
+        <span class="tally-sep" id="tally-practical-sep" style="visibility:hidden">/</span>
+        <span class="tally-target" id="tally-practical-target" style="visibility:hidden">0–3 cr</span>
+      </div>
+      <div class="tracker-progress"><div class="tracker-bar" id="bar-practical"></div></div>
+      <div class="tracker-status-text" id="status-practical">Select an option below</div>
+      <div class="tracker-na-note" id="practical-na-note">Select 3 additional credits<br>from Primary or Secondary above.</div>
+    </div>
+
+    <div class="tracker-card total-card" id="card-total">
+      <div class="complete-icon"><i class="bi bi-check-lg"></i></div>
+      <div class="tracker-card-label">Total Credits</div>
+      <div class="tracker-tally">
+        <span class="tally-current" id="tally-total">0</span>
+        <span class="tally-sep">/</span>
+        <span class="tally-target">16+ cr</span>
+      </div>
+      <div class="tracker-progress"><div class="tracker-bar" id="bar-total"></div></div>
+      <div class="tracker-status-text" id="status-total">Complete all categories</div>
+    </div>
+  </div>
+</div><!-- /tracker-column -->
+
+</div><!-- /app-outer -->
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script>
@@ -1536,6 +1606,10 @@ function renderTrackOptions(cat) {
     const card = document.createElement('div');
     card.className = 'track-card';
     card.dataset.trackId = track.id;
+    card.setAttribute('role', 'radio');
+    card.setAttribute('aria-checked', 'false');
+    card.setAttribute('tabindex', '0');
+    card.setAttribute('aria-label', track.label);
     card.innerHTML = `
       <div class="track-radio-dot"></div>
       <div>
@@ -1543,6 +1617,9 @@ function renderTrackOptions(cat) {
         ${track.subTracks ? '<div class="track-card-note">Sub-track selection required</div>' : ''}
       </div>`;
     card.addEventListener('click', () => onTrackClick(cat, track.id));
+    card.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onTrackClick(cat, track.id); }
+    });
     container.appendChild(card);
   });
 
@@ -1552,10 +1629,17 @@ function renderTrackOptions(cat) {
     const card = document.createElement('div');
     card.className = 'track-card';
     card.dataset.subtrackId = sub.id;
+    card.setAttribute('role', 'radio');
+    card.setAttribute('aria-checked', 'false');
+    card.setAttribute('tabindex', '0');
+    card.setAttribute('aria-label', sub.label);
     card.innerHTML = `
       <div class="track-radio-dot"></div>
       <div><div class="track-card-name">${sub.label}</div></div>`;
     card.addEventListener('click', () => onSubTrackClick(cat, sub.id));
+    card.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onSubTrackClick(cat, sub.id); }
+    });
     subContainer.appendChild(card);
   });
 }
@@ -1575,7 +1659,9 @@ function onTrackClick(cat, trackId) {
   const track = getTrack(trackId);
 
   document.querySelectorAll(`#${cat}-track-options .track-card`).forEach(card => {
-    card.classList.toggle('selected', card.dataset.trackId === trackId);
+    const sel = card.dataset.trackId === trackId;
+    card.classList.toggle('selected', sel);
+    card.setAttribute('aria-checked', sel ? 'true' : 'false');
   });
 
   const subSel = document.getElementById(`${cat}-subtrack-selector`);
@@ -1607,7 +1693,9 @@ function onSubTrackClick(cat, subTrackId) {
   state[cat].subTrackId = subTrackId;
 
   document.querySelectorAll(`#${cat}-subtrack-options .track-card`).forEach(card => {
-    card.classList.toggle('selected', card.dataset.subtrackId === subTrackId);
+    const sel = card.dataset.subtrackId === subTrackId;
+    card.classList.toggle('selected', sel);
+    card.setAttribute('aria-checked', sel ? 'true' : 'false');
   });
 
   renderCourses(cat);
@@ -1818,14 +1906,17 @@ function renderAppliedCourses() {
     entry.innerHTML = `
       <input type="text" class="applied-course-name"
         placeholder="Course name (e.g. Senior Design)"
+        aria-label="Applied Learning course ${i+1} name"
         value="${course.name.replace(/"/g,'&quot;')}" data-index="${i}" />
-      <select class="applied-course-credits" data-index="${i}">
+      <select class="applied-course-credits" data-index="${i}"
+        aria-label="Applied Learning course ${i+1} credits">
         <option value="0"${course.credits===0?' selected':''}>0 cr</option>
         <option value="1"${course.credits===1?' selected':''}>1 cr</option>
         <option value="2"${course.credits===2?' selected':''}>2 cr</option>
         <option value="3"${course.credits===3?' selected':''}>3 cr</option>
       </select>
       <button type="button" class="btn-remove-applied" data-index="${i}"
+        aria-label="Remove Applied Learning course ${i+1}"
         style="visibility:${showRemove?'visible':'hidden'}">&#215;</button>`;
     entry.querySelector('.applied-course-name').addEventListener('input', function () {
       state.practical.appliedCourses[+this.dataset.index].name = this.value;
