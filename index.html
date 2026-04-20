@@ -1093,7 +1093,7 @@
     <div class="ps-total-label">Total Certificate Credits</div>
     <div>
       <span class="ps-total-value" id="ps-total-value">0</span>
-      <span class="ps-total-min">cr (16 cr minimum)</span>
+      <span class="ps-total-min">credits (16 credit minimum)</span>
     </div>
   </div>
 
@@ -1121,11 +1121,11 @@
       <br>- Please direct questions to <a href="mailto:spec@purdue.edu">spec@purdue.edu</a>
     </p>
     <div class="requirement-pills">
-      <div class="req-pill"><strong>1 cr</strong> &nbsp;Space Engineering Seminar</div>
-      <div class="req-pill"><strong>9+ cr</strong> &nbsp;Primary Track</div>
-      <div class="req-pill"><strong>3+ cr</strong> &nbsp;Secondary Track</div>
-      <div class="req-pill"><strong>0–3 cr</strong> &nbsp;Practical Experience</div>
-      <div class="req-pill"><strong>16+ cr</strong> &nbsp;Total Minimum</div>
+      <div class="req-pill"><strong>1 credit</strong> &nbsp;Space Engineering Seminar</div>
+      <div class="req-pill"><strong>9+ credits</strong> &nbsp;Primary Track</div>
+      <div class="req-pill"><strong>3+ credits</strong> &nbsp;Secondary Track</div>
+      <div class="req-pill"><strong>0–3 credits</strong> &nbsp;Practical Experience</div>
+      <div class="req-pill"><strong>16+ credits</strong> &nbsp;Total Minimum</div>
     </div>
   </div>
 
@@ -1283,10 +1283,10 @@
       <div class="tracker-tally">
         <span class="tally-current" id="tally-seminar">0</span>
         <span class="tally-sep">/</span>
-        <span class="tally-target">1 cr</span>
+        <span class="tally-target">1 credit</span>
       </div>
       <div class="tracker-progress"><div class="tracker-bar" id="bar-seminar"></div></div>
-      <div class="tracker-status-text" id="status-seminar">1 cr required</div>
+      <div class="tracker-status-text" id="status-seminar">1 credit required</div>
       <div class="tracker-courses" id="courses-seminar"></div>
     </div>
 
@@ -1297,7 +1297,7 @@
       <div class="tracker-tally">
         <span class="tally-current" id="tally-primary">0</span>
         <span class="tally-sep">/</span>
-        <span class="tally-target">9+ cr</span>
+        <span class="tally-target">9+ credits</span>
       </div>
       <div class="tracker-progress"><div class="tracker-bar" id="bar-primary"></div></div>
       <div class="tracker-status-text" id="status-primary">Select a track first</div>
@@ -1311,7 +1311,7 @@
       <div class="tracker-tally">
         <span class="tally-current" id="tally-secondary">0</span>
         <span class="tally-sep">/</span>
-        <span class="tally-target">3+ cr</span>
+        <span class="tally-target">3+ credits</span>
       </div>
       <div class="tracker-progress"><div class="tracker-bar" id="bar-secondary"></div></div>
       <div class="tracker-status-text" id="status-secondary">Select a track first</div>
@@ -1324,7 +1324,7 @@
       <div class="tracker-tally">
         <span class="tally-current" id="tally-practical">—</span>
         <span class="tally-sep" id="tally-practical-sep" style="visibility:hidden">/</span>
-        <span class="tally-target" id="tally-practical-target" style="visibility:hidden">0–3 cr</span>
+        <span class="tally-target" id="tally-practical-target" style="visibility:hidden">0–3 credits</span>
       </div>
       <div class="tracker-progress"><div class="tracker-bar" id="bar-practical"></div></div>
       <div class="tracker-status-text" id="status-practical">Select an option below</div>
@@ -1337,7 +1337,7 @@
       <div class="tracker-tally">
         <span class="tally-current" id="tally-total">0</span>
         <span class="tally-sep">/</span>
-        <span class="tally-target">16+ cr</span>
+        <span class="tally-target">16+ credits</span>
       </div>
       <div class="tracker-progress"><div class="tracker-bar" id="bar-total"></div></div>
       <div class="tracker-status-text" id="status-total">Complete all categories</div>
@@ -1864,7 +1864,7 @@ function updateCard(cat) {
   } else if (done) {
     statusEl.textContent = '✓ Minimum met';
   } else {
-    statusEl.textContent = `${target - credits} cr remaining`;
+    statusEl.textContent = `${target - credits} credit${target - credits !== 1 ? 's' : ''} remaining`;
   }
 
   const listEl = document.getElementById(`courses-${cat}`);
@@ -1872,7 +1872,7 @@ function updateCard(cat) {
   state[cat].courses.forEach(c => {
     const div = document.createElement('div');
     div.className = 'tracker-course-item';
-    div.innerHTML = `<span>${c.code}</span><span>${c.credits} cr</span>`;
+    div.innerHTML = `<span>${c.code}</span><span>${c.credits} credit${c.credits !== 1 ? 's' : ''}</span>`;
     listEl.appendChild(div);
   });
 }
@@ -1882,17 +1882,25 @@ function updateCard(cat) {
 ══════════════════════════════════════════════════════════════ */
 function computePracticalCredits() {
   if (!state.practical.checkedOptions.includes('applied')) return 0;
-  return state.practical.appliedCourses.reduce((sum, c) => sum + c.credits, 0);
+  const raw = state.practical.appliedCourses.reduce((sum, c) => sum + c.credits, 0);
+  return Math.min(3, raw);   // section 4 caps at 3 cr toward the total
 }
 
 function updateAppliedSubtotal() {
-  const total = state.practical.appliedCourses.reduce((sum, c) => sum + c.credits, 0);
+  const raw     = state.practical.appliedCourses.reduce((sum, c) => sum + c.credits, 0);
+  const applied = Math.min(3, raw);   // mirrors the cap in computePracticalCredits
   const el = document.getElementById('applied-subtotal');
-  if (el) el.textContent = total + ' credit' + (total !== 1 ? 's' : '');
+  if (el) {
+    if (raw > 3) {
+      el.textContent = raw + ' credit' + (raw !== 1 ? 's' : '') + ' entered — 3 credits max applied';
+    } else {
+      el.textContent = applied + ' credit' + (applied !== 1 ? 's' : '');
+    }
+  }
   const badge = document.getElementById('applied-credits-badge');
   if (badge) {
     badge.textContent = state.practical.checkedOptions.includes('applied')
-      ? total + ' cr'
+      ? applied + ' credit' + (applied !== 1 ? 's' : '')
       : '0\u20133 credits';
   }
 }
@@ -1911,10 +1919,10 @@ function renderAppliedCourses() {
         value="${course.name.replace(/"/g,'&quot;')}" data-index="${i}" />
       <select class="applied-course-credits" data-index="${i}"
         aria-label="Applied Learning course ${i+1} credits">
-        <option value="0"${course.credits===0?' selected':''}>0 cr</option>
-        <option value="1"${course.credits===1?' selected':''}>1 cr</option>
-        <option value="2"${course.credits===2?' selected':''}>2 cr</option>
-        <option value="3"${course.credits===3?' selected':''}>3 cr</option>
+        <option value="0"${course.credits===0?' selected':''}>0 credits</option>
+        <option value="1"${course.credits===1?' selected':''}>1 credit</option>
+        <option value="2"${course.credits===2?' selected':''}>2 credits</option>
+        <option value="3"${course.credits===3?' selected':''}>3 credits</option>
       </select>
       <button type="button" class="btn-remove-applied" data-index="${i}"
         aria-label="Remove Applied Learning course ${i+1}"
@@ -1970,7 +1978,7 @@ function updatePracticalCard() {
 
   tSep.style.visibility = 'visible';
   tTarget.style.visibility = 'visible';
-  tTarget.textContent = '3 cr';
+  tTarget.textContent = '3 credits';
 
   const cr = s.credits;
   tallyEl.textContent = cr;
@@ -1983,7 +1991,7 @@ function updatePracticalCard() {
     const needed = 3 - cr;
     bar.style.width = (cr / 3 * 100) + '%';
     bar.className = 'tracker-bar' + (cr > 0 ? ' yellow' : '');
-    statusEl.textContent = '✓ Confirmed — add ' + needed + ' cr above';
+    statusEl.textContent = '✓ Confirmed — add ' + needed + ' credit' + (needed !== 1 ? 's' : '') + ' above';
     card.classList.add('status-green');
     naNote.style.display = 'block';
     naNote.innerHTML = 'Select ' + needed + ' additional credit' + (needed !== 1 ? 's' : '') +
@@ -2047,7 +2055,7 @@ function updateTotal() {
     statusEl.textContent = 'Declare practical experience';
   } else {
     const rem = 16 - total;
-    statusEl.textContent = rem > 0 ? `${rem} cr remaining` : 'Check category minimums';
+    statusEl.textContent = rem > 0 ? `${rem} credit${rem !== 1 ? 's' : ''} remaining` : 'Check category minimums';
   }
 
   document.getElementById('btn-generate').disabled = !allMet;
@@ -2165,7 +2173,7 @@ function buildCourseRows(courses) {
     `<tr>
        <td class="td-code">${c.code}</td>
        <td>${c.name}</td>
-       <td class="td-credits">${c.credits} cr</td>
+       <td class="td-credits">${c.credits} credit${c.credits !== 1 ? 's' : ''}</td>
      </tr>`
   ).join('');
 }
@@ -2190,32 +2198,32 @@ document.getElementById('btn-generate').addEventListener('click', () => {
   document.getElementById('ps-footer-date').textContent = today;
 
   /* Seminar */
-  document.getElementById('ps-seminar-credits').textContent = `${state.seminar.credits} cr`;
+  document.getElementById('ps-seminar-credits').textContent = `${state.seminar.credits} credit${state.seminar.credits !== 1 ? 's' : ''}`;
   document.getElementById('ps-seminar-body').innerHTML = buildCourseRows(state.seminar.courses);
 
   /* Primary */
-  document.getElementById('ps-primary-credits').textContent = `${state.primary.credits} cr`;
+  document.getElementById('ps-primary-credits').textContent = `${state.primary.credits} credit${state.primary.credits !== 1 ? 's' : ''}`;
   document.getElementById('ps-primary-track').textContent = buildTrackLabel('primary');
   document.getElementById('ps-primary-body').innerHTML = buildCourseRows(state.primary.courses);
 
   /* Secondary */
-  document.getElementById('ps-secondary-credits').textContent = `${state.secondary.credits} cr`;
+  document.getElementById('ps-secondary-credits').textContent = `${state.secondary.credits} credit${state.secondary.credits !== 1 ? 's' : ''}`;
   document.getElementById('ps-secondary-track').textContent = buildTrackLabel('secondary');
   document.getElementById('ps-secondary-body').innerHTML = buildCourseRows(state.secondary.courses);
 
   /* Practical */
   const practicalCr = state.practical.credits;
-  document.getElementById('ps-practical-credits').textContent = `${practicalCr} cr`;
+  document.getElementById('ps-practical-credits').textContent = `${practicalCr} credit${practicalCr !== 1 ? 's' : ''}`;
   const pOpts = state.practical.checkedOptions;
   const psLines = [];
   if (pOpts.includes('coop'))
     psLines.push('&#10003; Co-op / Internship &mdash; 0 credits toward certificate');
   if (pOpts.includes('applied')) {
     const appliedTotal = state.practical.appliedCourses.reduce((s, c) => s + c.credits, 0);
-    psLines.push('&#10003; Applied Learning Course &mdash; ' + appliedTotal + ' cr toward certificate');
+    psLines.push('&#10003; Applied Learning Course &mdash; ' + appliedTotal + ' credit' + (appliedTotal !== 1 ? 's' : '') + ' toward certificate');
     state.practical.appliedCourses.forEach(c => {
       if (c.name || c.credits > 0)
-        psLines.push('&nbsp;&nbsp;&bull;&nbsp;' + (c.name || '(unnamed course)') + ': ' + c.credits + ' cr');
+        psLines.push('&nbsp;&nbsp;&bull;&nbsp;' + (c.name || '(unnamed course)') + ': ' + c.credits + ' credit' + (c.credits !== 1 ? 's' : ''));
     });
   }
   if (pOpts.includes('club'))
